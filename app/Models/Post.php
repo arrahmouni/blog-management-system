@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Traits\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Image\Enums\CropPosition;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,8 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Post extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\PostFactory> */
-    use HasFactory, HasSlug, InteractsWithMedia;
+    use HasFactory, HasSlug, InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -26,8 +27,14 @@ class Post extends Model implements HasMedia
         'is_published',
         'published_at',
     ];
-
     public const MEDIA_COLLECTION = 'posts';
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['title', 'body', 'is_published', 'published_at'])
+        ->logOnlyDirty();
+    }
 
     // Perform crop on image via media library
     public function registerMediaConversions(?Media $media = null): void
