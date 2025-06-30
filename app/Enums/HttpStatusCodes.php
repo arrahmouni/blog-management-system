@@ -10,6 +10,7 @@ enum HttpStatusCodes: int
     case FORBIDDEN              = 403;
     case NOT_FOUND              = 404;
     case INTERNAL_SERVER_ERROR  = 500;
+    case UNPROCESSABLE_ENTITY   = 422;
 
     public static function all(): array
     {
@@ -20,6 +21,7 @@ enum HttpStatusCodes: int
             self::FORBIDDEN->value,
             self::NOT_FOUND->value,
             self::INTERNAL_SERVER_ERROR->value,
+            self::UNPROCESSABLE_ENTITY->value
         ];
     }
 }
