@@ -2,7 +2,6 @@
 
 namespace app\Http\Controllers\Api;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use app\Http\Resources\PaginateResource;
@@ -27,7 +26,23 @@ class BaseApiController extends Controller
 
     public function __construct()
     {
-        $this->data['model_plural']   = Str::plural(Str::snake(class_basename($this->model)));
+    }
+
+    /**
+     *
+     * Merge Data To Request For Collection
+     */
+    public function mergeDataToRequestForCollection(Request $request)
+    {
+        $request->merge([]);
+    }
+
+    /**
+     * Merge Data To Request For Show, Update And Destroy
+     */
+    public function mergeDataToRequest(Request $request)
+    {
+        $request->merge([]);
     }
 
     /**
@@ -35,6 +50,8 @@ class BaseApiController extends Controller
      */
     public function index(Request $request)
     {
+        $this->mergeDataToRequestForCollection($request);
+
         $this->data['model']    = $this->model->getDataForApi($request->all(), isCollection: true);
         $this->data['page']     = $request->has('page') ? $request->page : 1;
 
@@ -54,6 +71,8 @@ class BaseApiController extends Controller
      */
     public function show(Request $request)
     {
+        $this->mergeDataToRequest($request);
+
         $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
 
         return sendApiSuccessResponse(data: [
@@ -86,7 +105,9 @@ class BaseApiController extends Controller
     {
         app($this->modelRequest);
 
-        $this->data['model'] = $this->model->getDataForApi($request->id, isCollection: false);
+        $this->mergeDataToRequest($request);
+
+        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
 
         $this->modelService->updateModel($this->data['model'], app($this->modelRequest)->validated());
 
@@ -100,7 +121,9 @@ class BaseApiController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->data['model'] = $this->model->getDataForApi($request->id, isCollection: false);
+        $this->mergeDataToRequest($request);
+
+        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
 
         $this->data['model']->delete();
 

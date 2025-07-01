@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use app\Http\Services\Api\CategoryService;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CategoryController extends BaseApiController
 {
@@ -24,5 +25,12 @@ class CategoryController extends BaseApiController
         $this->modelService = $modelService;
 
         parent::__construct();
+    }
+
+    public function mergeDataToRequest(Request $request)
+    {
+        $request->merge([
+            'id' => $request->category
+        ]);
     }
 }

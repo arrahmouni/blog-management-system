@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRoles;
+use App\Enums\UserStatuses;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -57,5 +59,15 @@ class User extends Authenticatable
         return Attribute::make(
             set: fn ($value) => bcrypt($value),
         );
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === UserRoles::ADMIN->value;
+    }
+
+    public function isActive()
+    {
+        return $this->status === UserStatuses::ACTIVE->value;
     }
 }

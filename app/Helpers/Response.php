@@ -86,3 +86,17 @@ if(!function_exists('sendUnauthorizedResponse'))
         ], HttpStatusCode::UNAUTHORIZED->value);
     }
 }
+
+if(!function_exists('sendDontHavePermissionResponse'))
+{
+    function sendDontHavePermissionResponse()
+    {
+        return response()->json([
+            'success' => false,
+            'code'    => HttpStatusCode::FORBIDDEN->value,
+            'message' => 'You don\'t have permission to perform this action',
+            'data'    => (object) [],
+            'errors'  => (object) [],
+        ], HttpStatusCode::FORBIDDEN->value);
+    }
+}
