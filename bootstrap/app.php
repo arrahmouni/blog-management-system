@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Validation\ValidationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,10 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api/v1'
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo(fn(Request $request) => url('/') );
+        $middleware->redirectUsersTo(fn(Request $request) => url('/') );
+
         $middleware->statefulApi();
-    })
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // $middleware->throttleApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (Throwable $exception, $request) {
@@ -25,7 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($exception instanceof ValidationException) {
                 return sendValidationResponse($exception->validator);
             }
-
+            elseif($exception instanceof AuthenticationException)
+            {
+                return sendUnauthorizedResponse();
+            }
             // Fallback to default exception handling
             return null;
         });

@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\HttpStatusCodes;
+use App\Enums\HttpStatusCode;
 use Illuminate\Validation\Validator;
 
 if(!function_exists('sendApiSuccessResponse'))
 {
-    function sendApiSuccessResponse(string $message = 'Data fetched successfully', array $data = [], int $code = HttpStatusCodes::OK->value)
+    function sendApiSuccessResponse(string $message = 'Data fetched successfully', array $data = [], int $code = HttpStatusCode::OK->value)
     {
         return response()->json([
             'success' => true,
@@ -19,7 +19,7 @@ if(!function_exists('sendApiSuccessResponse'))
 
 if(!function_exists('sendApiFailResponse'))
 {
-    function sendApiFailResponse(string $message = 'Something went wrong', array $errors = [], int $code = HttpStatusCodes::BAD_REQUEST->value)
+    function sendApiFailResponse(string $message = 'Something went wrong', array $errors = [], int $code = HttpStatusCode::BAD_REQUEST->value)
     {
         return response()->json([
             'success' => false,
@@ -33,7 +33,7 @@ if(!function_exists('sendApiFailResponse'))
 
 if(!function_exists('sendSuccessInternalResponse'))
 {
-    function sendSuccessInternalResponse(string|null $message = null, array $data = [], int $code = HttpStatusCodes::OK->value)
+    function sendSuccessInternalResponse(string|null $message = null, array $data = [], int $code = HttpStatusCode::OK->value)
     {
         return [
             'success' => true,
@@ -47,7 +47,7 @@ if(!function_exists('sendSuccessInternalResponse'))
 
 if(!function_exists('sendFailInternalResponse'))
 {
-    function sendFailInternalResponse(string|null $message = null, array $errors = [], int $code = HttpStatusCodes::BAD_REQUEST->value)
+    function sendFailInternalResponse(string|null $message = null, array $errors = [], int $code = HttpStatusCode::BAD_REQUEST->value)
     {
         return [
             'success' => false,
@@ -65,10 +65,24 @@ if(!function_exists('sendValidationResponse'))
     {
         return response()->json([
             'success' => false,
-            'code'    => HttpStatusCodes::UNPROCESSABLE_ENTITY->value,
+            'code'    => HttpStatusCode::UNPROCESSABLE_ENTITY->value,
             'message' => 'Validation failed',
             'data'    => (object) [],
             'errors'  => $validator->errors(),
-        ], HttpStatusCodes::UNPROCESSABLE_ENTITY->value);
+        ], HttpStatusCode::UNPROCESSABLE_ENTITY->value);
+    }
+}
+
+if(!function_exists('sendUnauthorizedResponse'))
+{
+    function sendUnauthorizedResponse()
+    {
+        return response()->json([
+            'success' => false,
+            'code'    => HttpStatusCode::UNAUTHORIZED->value,
+            'message' => 'Unauthorized',
+            'data'    => (object) [],
+            'errors'  => (object) [],
+        ], HttpStatusCode::UNAUTHORIZED->value);
     }
 }
