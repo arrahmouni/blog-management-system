@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Post;
-use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PostSeeder extends Seeder
 {
@@ -16,6 +14,7 @@ class PostSeeder extends Seeder
     {
         Post::factory()
         ->count(10)
+        ->hasComments(10)
         ->create();
     }
 }

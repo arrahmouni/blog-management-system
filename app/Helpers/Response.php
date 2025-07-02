@@ -131,12 +131,12 @@ if(!function_exists('sendMethodNotAllowedResponse'))
 
 if(!function_exists('sendServerErrorResponse'))
 {
-    function sendServerErrorResponse()
+    function sendServerErrorResponse(string $message = 'Something went wrong')
     {
         return response()->json([
             'success' => false,
             'code'    => HttpStatusCode::INTERNAL_SERVER_ERROR->value,
-            'message' => 'Something went wrong',
+            'message' => $message,
             'data'    => (object) [],
             'errors'  => (object) [],
         ], HttpStatusCode::INTERNAL_SERVER_ERROR->value);

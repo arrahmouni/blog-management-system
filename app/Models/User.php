@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->status === UserStatuses::ACTIVE->value;
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', UserStatuses::ACTIVE->value);
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

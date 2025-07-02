@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PostController;
 
 Route::controller(AuthController::class)->group(function () {
@@ -29,4 +30,11 @@ Route::controller(PostController::class)->middleware(['auth:sanctum', 'can.post'
     Route::post('/'             , 'store');
     Route::post('{post}'        , 'update');
     Route::delete('{post}'      , 'destroy');
+});
+
+Route::controller(CommentController::class)->middleware(['auth:sanctum'])->prefix('post/{post}/comment')->group(function () {
+    Route::get('/'              , 'index');
+    Route::get('{comment}'      , 'show');
+    Route::post('/'             , 'store');
+    Route::delete('{comment}'   , 'destroy');
 });

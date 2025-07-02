@@ -48,10 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
             {
                 return sendMethodNotAllowedResponse();
             }
-            elseif(! debugEnabled())
-            {
-                return sendServerErrorResponse();
-            }
+
             return null;
         });
     })->create();
