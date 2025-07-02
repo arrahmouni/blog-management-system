@@ -8,6 +8,7 @@ use App\Enums\UserStatuses;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -54,20 +55,28 @@ class User extends Authenticatable
         ];
     }
 
-    public function password(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => bcrypt($value),
-        );
-    }
-
     public function isAdmin()
     {
         return $this->role === UserRoles::ADMIN->value;
     }
 
+    public function isWriter()
+    {
+        return $this->role === UserRoles::WRITER->value;
+    }
+
+    public function isUser()
+    {
+        return $this->role === UserRoles::USER->value;
+    }
+
     public function isActive()
     {
         return $this->status === UserStatuses::ACTIVE->value;
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
     }
 }

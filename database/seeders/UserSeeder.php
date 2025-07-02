@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Post;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -13,31 +14,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(
-            ['email' => 'admin@example.com'],
-            array_merge(
-                User::factory()->admin()->active()->make()->toArray(),
-                ['password' => 'password123', 'email' => 'admin@example.com']
-            )
-        );
+        if(! User::where('email', 'admin@example.com')->exists()) {
+            User::factory()->admin()->active()->hasPosts(5)->create([
+                'email' => 'admin@example.com',
+            ]);
+        }
 
-        User::firstOrCreate(
-            ['email' => 'writer@example.com'],
-            array_merge(
-                User::factory()->writer()->active()->make()->toArray(),
-                ['password' => 'password123', 'email' => 'writer@example.com']
-            )
-        );
+        if(! User::where('email', 'writer@example.com')->exists()) {
+            User::factory()->writer()->active()->hasPosts(5)->create([
+                'email' => 'writer@example.com',
+            ]);
+        }
 
-        User::firstOrCreate(
-            ['email' => 'user@example.com'],
-            array_merge(
-                User::factory()->user()->active()->make()->toArray(),
-                ['password' => 'password123', 'email' => 'user@example.com']
-            )
-        );
-
-        // These 10 will always be newly created
-        User::factory(5)->create();
+        if(! User::where('email', 'user@example.com')->exists()) {
+            User::factory()->user()->active()->create([
+                'email' => 'user@example.com',
+            ]);
+        }
     }
 }

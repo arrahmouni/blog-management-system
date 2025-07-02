@@ -6,6 +6,9 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -24,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'active.admin'      => \App\Http\Middleware\ActiveAdmin::class,
+            'can.post'          => \App\Http\Middleware\CanPost::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
@@ -36,7 +40,18 @@ return Application::configure(basePath: dirname(__DIR__))
             {
                 return sendUnauthorizedResponse();
             }
-            // Fallback to default exception handling
+            elseif($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException)
+            {
+                return sendNotFoundResponse();
+            }
+            elseif($exception instanceof MethodNotAllowedHttpException)
+            {
+                return sendMethodNotAllowedResponse();
+            }
+            elseif(! debugEnabled())
+            {
+                return sendServerErrorResponse();
+            }
             return null;
         });
     })->create();

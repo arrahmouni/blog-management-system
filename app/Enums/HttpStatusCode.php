@@ -12,6 +12,7 @@ enum HttpStatusCode: int
     case INTERNAL_SERVER_ERROR  = 500;
     case UNPROCESSABLE_ENTITY   = 422;
     case EXPIRED                = 419;
+    case METHOD_NOT_ALLOWED     = 405;
 
     public static function all(): array
     {
@@ -23,7 +24,9 @@ enum HttpStatusCode: int
             self::NOT_FOUND->value,
             self::INTERNAL_SERVER_ERROR->value,
             self::UNPROCESSABLE_ENTITY->value,
-            self::EXPIRED->value
+            self::EXPIRED->value,
+            self::METHOD_NOT_ALLOWED->value,
+
         ];
     }
 }

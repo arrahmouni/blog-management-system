@@ -4,9 +4,7 @@ namespace app\Http\Services\Api;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Enums\UserRoles;
 use App\Enums\HttpStatusCode;
-use App\Enums\UserStatuses;
 use App\Mail\PasswordResetLink;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
@@ -26,12 +24,11 @@ class AuthService extends BaseApiService
      */
     public function register(array $data): array
     {
-        $data['role'] = UserRoles::USER->value;
-        $data['status'] = UserStatuses::ACTIVE->value;
-
         DB::transaction(function () use($data) {
             $this->data['user']   = User::create($data);
         });
+
+        $this->data['user']->refresh();
 
         return sendSuccessInternalResponse('User registered successfully', [
             'user'  => new UserResource($this->data['user']),

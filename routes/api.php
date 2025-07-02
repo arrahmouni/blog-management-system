@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\PostController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('register'              , 'register');
@@ -12,10 +13,20 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('reset-password'        , 'resetPassword');
 });
 
+// Only Admin Can Access
 Route::controller(CategoryController::class)->middleware(['auth:sanctum', 'active.admin'])->prefix('category')->group(function () {
     Route::get('/'              , 'index');
     Route::get('{category}'     , 'show');
     Route::post('/'             , 'store');
-    Route::put('{category}'     , 'update');
+    Route::post('{category}'    , 'update');
     Route::delete('{category}'  , 'destroy');
+});
+
+// Admin And Writer Can Access
+Route::controller(PostController::class)->middleware(['auth:sanctum', 'can.post'])->prefix('post')->group(function () {
+    Route::get('/'              , 'index');
+    Route::get('{post}'         , 'show');
+    Route::post('/'             , 'store');
+    Route::post('{post}'        , 'update');
+    Route::delete('{post}'      , 'destroy');
 });

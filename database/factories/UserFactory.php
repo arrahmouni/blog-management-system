@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'last_name'     => fake()->lastName(),
             'email'         => fake()->unique()->safeEmail(),
             'phone'         => fake()->phoneNumber(),
-            'password'      => Hash::make('password'),
+            'password'      => bcrypt('password123'),
         ];
     }
 
