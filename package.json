@@ -8,10 +8,28 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
+        "@vitejs/plugin-vue": "^6.0.0",
+        "autoprefixer": "^10.4.21",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
-        "tailwindcss": "^4.0.0",
+        "postcss": "^8.5.6",
+        "sass-embedded": "^1.89.2",
+        "tailwindcss": "^3.4.17",
         "vite": "^6.2.4"
+    },
+    "dependencies": {
+        "@formkit/vue": "^1.6.9",
+        "formkit": "^1.6.9",
+        "sweetalert2": "^11.22.2",
+        "vue": "^3.5.17",
+        "vue-loader": "^17.3.1",
+        "vue-router": "^4.5.1",
+        "vue-select": "^4.0.0-beta.6",
+        "vue-the-mask": "^0.11.1",
+        "vue-toastification": "^2.0.0-rc.5",
+        "vue-uuid": "^3.0.0",
+        "vue-yup-form": "^1.0.8",
+        "yup": "^1.6.1"
     }
 }

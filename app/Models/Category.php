@@ -37,7 +37,7 @@ class Category extends Model
 
     public function getDataForApi($data, $isCollection = false) : mixed
     {
-        $modelCollection = $this->query();
+        $modelCollection = $this->withTrashed();
 
         if($isCollection) {
             return $modelCollection->latest();

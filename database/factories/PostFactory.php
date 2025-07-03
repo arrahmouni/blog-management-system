@@ -34,7 +34,7 @@ class PostFactory extends Factory
             $randomCategories = Category::inRandomOrder()->limit(rand(1, 3))->pluck('id');
             $post->categories()->sync($randomCategories);
 
-            $randomImagePath = public_path('images/'. rand(1, 22) .'.png');
+            $randomImagePath = public_path('images/test/'. rand(1, 22) .'.png');
 
             $post->addMedia($randomImagePath)
             ->preservingOriginal()

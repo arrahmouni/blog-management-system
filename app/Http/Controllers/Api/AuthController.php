@@ -68,4 +68,11 @@ class AuthController extends BaseApiController
 
         return sendApiSuccessResponse($response['message'], $response['data']);
     }
+
+    public function showUserInfo(Request $request)
+    {
+        return sendApiSuccessResponse('User info', [
+            'user' => new UserResource($request->user())
+        ]);
+    }
 }

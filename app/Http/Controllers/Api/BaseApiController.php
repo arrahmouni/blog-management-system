@@ -129,4 +129,27 @@ class BaseApiController extends Controller
 
         return sendApiSuccessResponse('Deleted successfully');
     }
+
+
+    public function restore(Request $request)
+    {
+        $this->mergeDataToRequest($request);
+
+        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+
+        $this->data['model']->restore();
+
+        return sendApiSuccessResponse('Restored successfully');
+    }
+
+    public function forceDelete(Request $request)
+    {
+        $this->mergeDataToRequest($request);
+
+        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+
+        $this->data['model']->forceDelete();
+
+        return sendApiSuccessResponse('Deleted successfully');
+    }
 }

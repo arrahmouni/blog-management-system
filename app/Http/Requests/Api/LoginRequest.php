@@ -24,4 +24,11 @@ class LoginRequest extends BaseApiRequest
     {
         return true;
     }
+
+    public function messages()
+    {
+        return [
+            'login.required'    => 'The email or phone number field is required.',
+        ];
+    }
 }

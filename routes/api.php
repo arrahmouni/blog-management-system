@@ -12,15 +12,18 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout'                , 'logout')->middleware('auth:sanctum');
     Route::post('forgot-password'       , 'sendResetPasswordLink')->middleware(['throttle:3,1']);
     Route::post('reset-password'        , 'resetPassword');
+    Route::get('user'                   , 'showUserInfo')->middleware('auth:sanctum');
 });
 
 // Only Admin Can Access
 Route::controller(CategoryController::class)->middleware(['auth:sanctum', 'active.admin'])->prefix('category')->group(function () {
-    Route::get('/'              , 'index');
-    Route::get('{category}'     , 'show');
-    Route::post('/'             , 'store');
-    Route::post('{category}'    , 'update');
-    Route::delete('{category}'  , 'destroy');
+    Route::get('/'                      , 'index');
+    Route::get('{category}'             , 'show');
+    Route::post('/'                     , 'store');
+    Route::post('{category}'            , 'update');
+    Route::delete('{category}'          , 'destroy');
+    Route::post('{category}/restore'    , 'restore');
+    Route::delete('{category}/force'    , 'forceDelete');
 });
 
 // Admin And Writer Can Access

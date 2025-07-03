@@ -19,6 +19,7 @@ class CategoryResource extends JsonResource
             'title'         => $this->title,
             'slug'          => $this->slug,
             'created_at'    => $this->created_at_format,
+            'deleted_at'    => $this->deleted_at
         ];
     }
 }

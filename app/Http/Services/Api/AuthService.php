@@ -5,6 +5,7 @@ namespace app\Http\Services\Api;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Enums\HttpStatusCode;
+use App\Enums\UserRoles;
 use App\Mail\PasswordResetLink;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
@@ -46,7 +47,9 @@ class AuthService extends BaseApiService
     {
         $field = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
-        if (Auth::attempt([$field => $data['login'], 'password' => $data['password']])) {
+        if (Auth::attemptWhen([$field => $data['login'], 'password' => $data['password']], function(User $user) {
+            return $user->isActive() && ($user->isAdmin() || $user->isWriter());
+        })) {
             $user  = Auth::user();
             $token = $this->createToken($user);
 
@@ -56,8 +59,7 @@ class AuthService extends BaseApiService
             ]);
         }
 
-        return sendFailInternalResponse('Invalid credentials');
-
+        return sendFailInternalResponse('Login failed, please check your credentials');
     }
 
     public function sendResetPasswordLink(array $data): array
