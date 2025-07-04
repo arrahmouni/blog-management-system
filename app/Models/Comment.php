@@ -30,7 +30,7 @@ class Comment extends Model
         ->logOnlyDirty();
     }
 
-    public function getDataForApi($data, $isCollection = false) : mixed
+    public function getDataForApi($isCollection = false) : mixed
     {
         $modelCollection = $this->with('post', 'user');
         $user = request()->user();
@@ -41,10 +41,10 @@ class Comment extends Model
             }
 
             if($isCollection) {
-                return $modelCollection->where('post_id', $data['post_id'])->latest();
+                return $modelCollection->where('post_id', request()->route('post'))->orderBy('id', 'desc');
             }
 
-            return $modelCollection->findOrFail($data['id']);
+            return $modelCollection->findOrFail(request()->route('comment'));
         }
 
         return null;

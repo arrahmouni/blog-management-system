@@ -42,7 +42,8 @@ trait HasSlug
         $counter = 1;
 
         while (
-            static::where('slug', $slug)
+            static::withTrashed()
+            ->where('slug', $slug)
                 ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
                 ->exists()
         ) {

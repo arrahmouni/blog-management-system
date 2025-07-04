@@ -34,17 +34,17 @@ class Category extends Model
         return $this->belongsToMany(Post::class);
     }
 
-    public function getDataForApi($data, $isCollection = false) : mixed
+    public function getDataForApi($isCollection = false) : mixed
     {
         $modelCollection = $this->query();
 
         if(request()->user()->isAdmin()) $modelCollection->withTrashed();
 
         if($isCollection) {
-            return $modelCollection->latest();
+            return $modelCollection->orderBy('id', 'desc');
         }
 
-        return $modelCollection->findOrFail($data['id']);
+        return $modelCollection->findOrFail(request()->route('category'));
     }
 
     protected function createdAtFormat(): Attribute

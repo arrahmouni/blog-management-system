@@ -27,7 +27,7 @@ class PostService extends BaseApiService
         $modelData['user_id']       = $user->id;
         $modelData['is_published']  = $user->isAdmin() ? true : false; // only admin can publish without approval
         $modelData['published_at']  = $user->isAdmin() ? now() : null; // only admin can publish without approval
-        
+
         $model = DB::transaction(function () use($data, $modelData) {
             $model = CrudModel::create($modelData);
 
@@ -66,12 +66,8 @@ class PostService extends BaseApiService
         $model->categories()->sync($categoryIds);
     }
 
-    public function approve($postId)
+    public function approve($model)
     {
-        $model = CrudModel::find($postId);
-
-        if(!$model) return sendFailInternalResponse('Post not found');
-
         $model->is_published = true;
         $model->published_at  = now();
         $model->save();
@@ -79,12 +75,8 @@ class PostService extends BaseApiService
         return $model->refresh();
     }
 
-    public function reject($postId)
+    public function reject($model)
     {
-        $model = CrudModel::find($postId);
-
-        if(!$model) return sendFailInternalResponse('Post not found');
-
         $model->is_published = false;
         $model->published_at  = null;
         $model->save();

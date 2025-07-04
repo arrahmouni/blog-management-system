@@ -301,9 +301,10 @@
 
                 fetchData(); // Refresh the data
             } catch (error) {
+                console.log(error);
                 Swal.fire(
                     'Error!',
-                    'Failed to delete category.',
+                    error.response.data.message,
                     'error'
                 );
                 console.error(error);
@@ -338,7 +339,7 @@
                 fetchData();
             }
         } catch (error) {
-            toast.error("Failed to restore category.");
+            toast.error(error.response.data.message);
             console.error(error);
         }
     };
@@ -360,7 +361,7 @@
                 toast.success("Category permanently deleted!");
                 fetchData();
             } catch (error) {
-                toast.error("Failed to delete category.");
+                toast.error(error.response.data.message);
                 console.error(error);
             }
         }

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -24,11 +25,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->statefulApi();
         // $middleware->throttleApi();
-
-        $middleware->alias([
-            'active.admin'      => \App\Http\Middleware\ActiveAdmin::class,
-            'can.post'          => \App\Http\Middleware\CanPost::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (Throwable $exception, $request) {
@@ -47,6 +43,10 @@ return Application::configure(basePath: dirname(__DIR__))
             elseif($exception instanceof MethodNotAllowedHttpException)
             {
                 return sendMethodNotAllowedResponse();
+            }
+            elseif($exception instanceof AccessDeniedHttpException)
+            {
+                return sendDontHavePermissionResponse();
             }
 
             return null;

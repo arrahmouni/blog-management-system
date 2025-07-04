@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
 use App\Models\Comment;
-use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
 use App\Http\Services\Api\CommentService;
 use App\Http\Requests\StoreCommentRequest;
 use app\Http\Controllers\Api\BaseApiController;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends BaseApiController
 {
@@ -26,21 +26,6 @@ class CommentController extends BaseApiController
         $this->modelService = $modelService;
 
         parent::__construct();
-    }
-
-    public function mergeDataToRequestForCollection(Request $request)
-    {
-        $request->merge([
-            'post_id'   => $request->post
-        ]);
-    }
-
-    public function mergeDataToRequest(Request $request)
-    {
-        $request->merge([
-            'post_id'   => $request->post,
-            'id'        => $request->comment
-        ]);
     }
 
     /**
@@ -67,9 +52,11 @@ class CommentController extends BaseApiController
         ]);
     }
 
-    public function accept(Request $request)
+    public function approve(Comment $comment)
     {
-        $result = $this->modelService->accept($request->comment);
+        Gate::authorize('approve', $comment);
+
+        $result = $this->modelService->approve($comment);
 
         if(is_array($result) && isset($result['success']) && ! $result['success']) {
             return sendApiFailResponse($result['message'], $result['errors']);
@@ -80,9 +67,11 @@ class CommentController extends BaseApiController
         ]);
     }
 
-    public function reject(Request $request)
+    public function reject(Comment $comment)
     {
-        $result = $this->modelService->reject($request->comment);
+        Gate::authorize('reject', $comment);
+
+        $result = $this->modelService->reject($comment);
 
         if(is_array($result) && isset($result['success']) && ! $result['success']) {
             return sendApiFailResponse($result['message'], $result['errors']);

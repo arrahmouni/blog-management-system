@@ -5,7 +5,7 @@ namespace app\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use app\Http\Resources\PaginateResource;
-
+use Illuminate\Support\Facades\Gate;
 class BaseApiController extends Controller
 {
     public $data = [];
@@ -29,28 +29,6 @@ class BaseApiController extends Controller
     }
 
     /**
-     * Merge data to request for collection
-     *
-     *  @param Request $request
-     *  @return void
-     */
-    public function mergeDataToRequestForCollection(Request $request)
-    {
-        $request->merge([]);
-    }
-
-    /**
-     *  Merge data to request
-     *
-     *  @param Request $request
-     *  @return void
-     */
-    public function mergeDataToRequest(Request $request)
-    {
-        $request->merge([]);
-    }
-
-    /**
      *  Display a listing of the resource.
      *
      *  @param Request $request
@@ -58,9 +36,9 @@ class BaseApiController extends Controller
      */
     public function index(Request $request)
     {
-        $this->mergeDataToRequestForCollection($request);
+        Gate::authorize('viewAny', $this->model);
 
-        $this->data['model']    = $this->model->getDataForApi($request->all(), isCollection: true);
+        $this->data['model']    = $this->model->getDataForApi(true);
         $this->data['page']     = $request->has('page') ? $request->page : 1;
 
         $perPage = config('app.pagination');
@@ -82,9 +60,9 @@ class BaseApiController extends Controller
      */
     public function show(Request $request)
     {
-        $this->mergeDataToRequest($request);
+        $this->data['model'] = $this->model->getDataForApi();
 
-        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+        Gate::authorize('view', $this->data['model']);
 
         return sendApiSuccessResponse(data: [
             'data' => new $this->modelResource($this->data['model']),
@@ -98,6 +76,8 @@ class BaseApiController extends Controller
      */
     public function store()
     {
+        Gate::authorize('create', $this->model);
+
         app($this->modelRequest);
 
         $result = $this->modelService->createModel(app($this->modelRequest)->validated());
@@ -118,11 +98,11 @@ class BaseApiController extends Controller
      */
     public function update(Request $request)
     {
+        $this->data['model'] = $this->model->getDataForApi();
+
+        Gate::authorize('update', $this->data['model']);
+
         app($this->modelRequest);
-
-        $this->mergeDataToRequest($request);
-
-        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
 
         $this->modelService->updateModel($this->data['model'], app($this->modelRequest)->validated());
 
@@ -150,9 +130,9 @@ class BaseApiController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->mergeDataToRequest($request);
+        $this->data['model'] = $this->model->getDataForApi();
 
-        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+        Gate::authorize('delete', $this->data['model']);
 
         $result = $this->canDelete($this->data['model']);
 
@@ -173,9 +153,9 @@ class BaseApiController extends Controller
      */
     public function restore(Request $request)
     {
-        $this->mergeDataToRequest($request);
+        $this->data['model'] = $this->model->getDataForApi();
 
-        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+        Gate::authorize('restore', $this->data['model']);
 
         $this->data['model']->restore();
 
@@ -185,9 +165,9 @@ class BaseApiController extends Controller
 
     public function forceDelete(Request $request)
     {
-        $this->mergeDataToRequest($request);
+        $this->data['model'] = $this->model->getDataForApi();
 
-        $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+        Gate::authorize('forceDelete', $this->data['model']);
 
         $result = $this->canDelete($this->data['model']);
 

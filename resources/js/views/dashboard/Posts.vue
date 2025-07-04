@@ -504,7 +504,7 @@
     const loadingPostDetails = ref(false);
     const modalBackdrop = ref(null);
     const modalContent = ref(null);
-    
+
     const openViewModal = async (post) => {
         try {
             loadingPostDetails.value = true;
@@ -519,7 +519,7 @@
 
             await fetchComments();
         } catch (error) {
-            toast.error("Failed to load post details");
+            toast.error(error.response.data.message);
         } finally {
             loadingPostDetails.value = false;
         }
@@ -565,7 +565,7 @@
             currentCommentsPage.value = page;
             hasMoreComments.value = data.paginate.current_page < data.paginate.last_page;
         } catch (error) {
-            toast.error("Failed to load comments");
+            toast.error(error.response.data.message);
         } finally {
             loadingComments.value = false;
             loadingMoreComments.value = false;
@@ -596,7 +596,7 @@
             await fetchData();
             closeViewModal();
         } catch (error) {
-            toast.error("Failed to approve post.");
+            toast.error(error.response.data.message);
         }
     };
 
@@ -607,7 +607,7 @@
             toast.success("Post unpublished!");
             closeViewModal();
         } catch (error) {
-            toast.error("Failed to unpublish post.");
+            toast.error(error.response.data.message);
         }
     };
 
@@ -618,7 +618,7 @@
             comment.is_accepted = true;
             toast.success("Comment accepted");
         } catch (error) {
-            toast.error("Failed to accept comment");
+            toast.error(error.response.data.message);
             console.error("Comment acceptance error:", error.response?.data || error.message);
         } finally {
             comment.loading = false;
@@ -632,7 +632,7 @@
             comment.is_accepted = false;
             toast.success("Comment rejected");
         } catch (error) {
-            toast.error("Failed to reject comment");
+            toast.error(error.response.data.message);
             console.error("Comment rejection error:", error.response?.data || error.message);
         } finally {
             comment.loading = false;
@@ -657,7 +657,7 @@
                 fetchData();
             }
         } catch (error) {
-            toast.error("Failed to restore post.");
+            toast.error(error.response.data.message);
             console.error(error);
         }
     };
@@ -679,7 +679,7 @@
                 toast.success("Post permanently deleted!");
                 fetchData();
             } catch (error) {
-                toast.error("Failed to delete post.");
+                toast.error(error.response.data.message);
                 console.error(error);
             }
         }
@@ -836,7 +836,7 @@
 
                 fetchData();
             } catch (error) {
-                Swal.fire("Error!", "Failed to delete post.", "error");
+                Swal.fire("Error!", error.response.data.message, "error");
                 console.error(error);
             }
         }

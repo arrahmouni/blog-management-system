@@ -52,7 +52,7 @@ class Post extends Model implements HasMedia
             ->performOnCollections($this::MEDIA_COLLECTION);
     }
 
-    public function getDataForApi($data, $isCollection = false) : mixed
+    public function getDataForApi($isCollection = false) : mixed
     {
         $modelCollection = $this->query();
         $user            = request()->user();
@@ -62,14 +62,13 @@ class Post extends Model implements HasMedia
                 $modelCollection->withTrashed();
             } elseif($user->isWriter()) {
                 $modelCollection->where('user_id', $user->id);
-            } elseif($user->isUser()) {
-                $modelCollection->published();
             }
 
             if($isCollection) {
                 return $modelCollection->orderBy('id', 'desc');
             }
-            return $modelCollection->findOrFail($data['id']);
+            
+            return $modelCollection->findOrFail(request()->route('post'));
         }
 
         return null;

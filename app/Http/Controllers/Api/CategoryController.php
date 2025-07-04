@@ -27,13 +27,6 @@ class CategoryController extends BaseApiController
         parent::__construct();
     }
 
-    public function mergeDataToRequest(Request $request)
-    {
-        $request->merge([
-            'id' => $request->category
-        ]);
-    }
-
     public function canDelete($model)
     {
         if($model->posts()->exists()) return sendFailInternalResponse('Category has posts, cannot delete');

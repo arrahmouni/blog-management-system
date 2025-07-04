@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
 use App\Http\Services\Api\PostService;
 use App\Http\Requests\StorePostRequest;
 use app\Http\Controllers\Api\BaseApiController;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends BaseApiController
 {
@@ -27,16 +27,11 @@ class PostController extends BaseApiController
         parent::__construct();
     }
 
-    public function mergeDataToRequest(Request $request)
+    public function approve(Post $post)
     {
-        $request->merge([
-            'id' => $request->post
-        ]);
-    }
+        Gate::authorize('approve', $post);
 
-    public function approve(Request $request)
-    {
-        $result = $this->modelService->approve($request->post);
+        $result = $this->modelService->approve($post);
 
         if(is_array($result) && isset($result['success']) && ! $result['success']) {
             return sendApiFailResponse($result['message'], $result['errors']);
@@ -47,9 +42,11 @@ class PostController extends BaseApiController
         ]);
     }
 
-    public function reject(Request $request)
+    public function reject(Post $post)
     {
-        $result = $this->modelService->reject($request->post);
+        Gate::authorize('reject', $post);
+
+        $result = $this->modelService->reject($post);
 
         if(is_array($result) && isset($result['success']) && ! $result['success']) {
             return sendApiFailResponse($result['message'], $result['errors']);
