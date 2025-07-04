@@ -4,8 +4,11 @@ namespace app\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ActivityResource;
 use app\Http\Resources\PaginateResource;
 use Illuminate\Support\Facades\Gate;
+use Spatie\Activitylog\Models\Activity;
+
 class BaseApiController extends Controller
 {
     public $data = [];
@@ -53,6 +56,32 @@ class BaseApiController extends Controller
     }
 
     /**
+     * Show Log
+     */
+    public function logs(Request $request)
+    {
+        Gate::authorize('showLog', $this->model);
+
+        $this->data['page']     = $request->has('page') ? $request->page : 1;
+
+        $perPage = config('app.pagination');
+
+        $this->data['data']     = Activity::where('subject_type', get_class($this->model))
+        ->where('subject_id', $request->id)
+        ->with('causer')
+        ->latest()
+        ->paginate($perPage, ['*'], 'page', $this->data['page']);
+
+
+        $this->data['paginate'] = new PaginateResource($this->data['data']);
+
+        return sendApiSuccessResponse(data: [
+            'data'      => ActivityResource::collection($this->data['data']),
+            'paginate'  => $this->data['paginate'],
+        ]);
+    }
+
+    /**
      * Display the specified resource to api.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -68,6 +97,7 @@ class BaseApiController extends Controller
             'data' => new $this->modelResource($this->data['model']),
         ]);
     }
+
 
     /**
      * Store a newly created resource in storage.

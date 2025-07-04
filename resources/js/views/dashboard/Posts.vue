@@ -443,7 +443,6 @@
                         </button>
                     </div>
 
-
                     <div v-if="isAdmin" class="flex justify-end space-x-2">
                         <button
                             v-if="!currentPost.is_published && !currentPost.deleted_at"

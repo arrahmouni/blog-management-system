@@ -73,4 +73,9 @@ class PostPolicy
     {
         return $user->isAdmin();
     }
+
+    public function showLog(User $user, Post $post)
+    {
+        return $user->isAdmin() || $post->user_id == $user->id;
+    }
 }

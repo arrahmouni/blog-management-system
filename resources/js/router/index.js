@@ -9,6 +9,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Unauthorized from "../views/errors/403.vue";
 import Categories from '../views/dashboard/Categories.vue';
 import Posts from '../views/dashboard/Posts.vue';
+import CategoryLogs from '../views/dashboard/CategoryLogs.vue';
 
 const routes = [
     {
@@ -44,6 +45,12 @@ const routes = [
                 component: Categories,
                 name: 'Categories',
                 meta: {requiredRole: 'admin'}
+            },
+            {
+                path: 'categories/:id/logs',
+                name: 'category-logs',
+                component: CategoryLogs,
+                props: true
             },
             {
                 path: 'posts',

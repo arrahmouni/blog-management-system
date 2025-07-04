@@ -24,21 +24,21 @@ Route::controller(CategoryController::class)->middleware(['auth:sanctum'])->pref
     Route::delete('{category}'          , 'destroy');
     Route::post('{category}/restore'    , 'restore');
     Route::delete('{category}/force'    , 'forceDelete');
-})->where('category', '[0-9]+');
+    Route::get('{id}/logs'              , 'logs');
+});
 
-// Admin And Writer Can Access
 Route::controller(PostController::class)->middleware(['auth:sanctum'])->prefix('post')->group(function () {
         Route::get('/'                  , 'index');
         Route::get('{post}'             , 'show');
         Route::post('/'                 , 'store');
         Route::post('{post}'            , 'update');
         Route::delete('{post}'          , 'destroy');
-
-        Route::put('/{post}/approve'   , 'approve');
-        Route::put('/{post}/reject'    , 'reject');
+        Route::get('{id}/logs'        , 'logs');
+        Route::put('/{post}/approve'    , 'approve');
+        Route::put('/{post}/reject'     , 'reject');
         Route::post('{post}/restore'    , 'restore');
         Route::delete('{post}/force'    , 'forceDelete');
-})->where('post', '[0-9]+');
+});
 
 Route::controller(CommentController::class)->middleware(['auth:sanctum'])->group(function () {
     Route::prefix('post/{post}/comment')->group(function () {
@@ -46,8 +46,8 @@ Route::controller(CommentController::class)->middleware(['auth:sanctum'])->group
         Route::get('{comment}'      , 'show');
         Route::post('/'             , 'store');
         Route::delete('{comment}'   , 'destroy');
-    })->where('post', '[0-9]+')->where('comment', '[0-9]+');
+    });
 
-    Route::put('comment/{comment}/accept', 'approve')->where('comment', '[0-9]+');
-    Route::put('comment/{comment}/reject', 'reject')->where('comment', '[0-9]+');
+    Route::put('comment/{comment}/accept', 'approve');
+    Route::put('comment/{comment}/reject', 'reject');
 });

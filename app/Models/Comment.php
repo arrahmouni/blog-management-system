@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Comment extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -22,13 +20,6 @@ class Comment extends Model
     ];
 
     protected $appends = ['created_at_format'];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['body', 'is_accepted'])
-        ->logOnlyDirty();
-    }
 
     public function getDataForApi($isCollection = false) : mixed
     {

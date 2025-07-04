@@ -63,4 +63,9 @@ class CategoryPolicy
     {
         return $user->isAdmin();
     }
+
+    public function showLog(User $user, Category $category): bool
+    {
+        return $user->isAdmin();
+    }
 }
