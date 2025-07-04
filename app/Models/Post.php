@@ -41,7 +41,8 @@ class Post extends Model implements HasMedia
     {
         return LogOptions::defaults()
         ->logOnly(['title', 'body', 'is_published', 'published_at'])
-        ->logOnlyDirty();
+        ->logOnlyDirty()
+        ->dontLogIfAttributesChangedOnly(['updated_at']);
     }
 
     // Perform crop on image via media library
@@ -67,7 +68,7 @@ class Post extends Model implements HasMedia
             if($isCollection) {
                 return $modelCollection->orderBy('id', 'desc');
             }
-            
+
             return $modelCollection->findOrFail(request()->route('post'));
         }
 

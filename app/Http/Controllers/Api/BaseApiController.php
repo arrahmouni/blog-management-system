@@ -66,12 +66,16 @@ class BaseApiController extends Controller
 
         $perPage = config('app.pagination');
 
-        $this->data['data']     = Activity::where('subject_type', get_class($this->model))
+        $query = Activity::where('subject_type', get_class($this->model))
         ->where('subject_id', $request->id)
         ->with('causer')
-        ->latest()
-        ->paginate($perPage, ['*'], 'page', $this->data['page']);
+        ->where(function ($q) {
+            $q->whereJsonLength('properties->old', '>', 0)
+                ->orWhereJsonLength('properties->attributes', '>', 0);
+        })
+        ->latest();
 
+        $this->data['data'] = $query->paginate($perPage, ['*'], 'page', $this->data['page']);
 
         $this->data['paginate'] = new PaginateResource($this->data['data']);
 

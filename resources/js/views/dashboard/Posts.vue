@@ -58,62 +58,79 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ post.published_at }}</td>
 
-                        <td class="px-6 py-4 whitespace-nowrap space-x-2">
-                            <!-- Edit Button -->
-                            <button
-                                v-if="!post.deleted_at"
-                                @click="openEditModal(post)"
-                                class="text-blue-500 hover:text-blue-700"
-                                title="Edit"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                                </svg>
-                            </button>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-wrap gap-2">
+                                <!-- View Details Button -->
+                                <button
+                                    @click="openViewModal(post)"
+                                    class="p-2 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-500 transition-colors"
+                                    title="View Details"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
 
-                            <!-- Delete Button -->
-                            <button
-                                v-if="!post.deleted_at"
-                                @click="confirmDelete(post.id)"
-                                class="text-red-500 hover:text-red-700"
-                                title="Delete"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+                                <!-- View Logs Button -->
+                                <router-link
+                                    :to="{ name: 'post-logs', params: { id: post.id } }"
+                                    class="p-2 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-500 transition-colors"
+                                    title="View Activity Logs"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </router-link>
 
-                            <button
-                                v-if="post.deleted_at && isAdmin"
-                                @click="restoreItem(post.id)"
-                                class="text-green-500 hover:text-green-700"
-                                title="Restore"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                            </button>
+                                <!-- Edit Button -->
+                                <button
+                                    v-if="!post.deleted_at"
+                                    @click="openEditModal(post)"
+                                    class="p-2 rounded-full bg-green-50 hover:bg-green-100 text-green-500 transition-colors"
+                                    title="Edit"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                </button>
 
-                            <button
-                                v-if="post.deleted_at && isAdmin"
-                                @click="confirmForceDelete(post.id)"
-                                class="text-red-700 hover:text-red-900"
-                                title="Delete Permanently"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                            <button
-                                @click="openViewModal(post)"
-                                class="text-blue-500 hover:text-blue-700"
-                                title="View Details"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </button>
+                                <!-- Delete Button -->
+                                <button
+                                    v-if="!post.deleted_at"
+                                    @click="confirmDelete(post.id)"
+                                    class="p-2 rounded-full bg-red-50 hover:bg-red-100 text-red-500 transition-colors"
+                                    title="Delete"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Restore Button -->
+                                <button
+                                    v-if="post.deleted_at && isAdmin"
+                                    @click="restoreItem(post.id)"
+                                    class="p-2 rounded-full bg-green-50 hover:bg-green-100 text-green-500 transition-colors"
+                                    title="Restore"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </button>
+
+                                <!-- Permanent Delete Button -->
+                                <button
+                                    v-if="post.deleted_at && isAdmin"
+                                    @click="confirmForceDelete(post.id)"
+                                    class="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-700 transition-colors"
+                                    title="Delete Permanently"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

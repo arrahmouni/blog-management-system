@@ -26,7 +26,8 @@ class Category extends Model
     {
         return LogOptions::defaults()
         ->logOnly(['title'])
-        ->logOnlyDirty();
+        ->logOnlyDirty()
+        ->dontLogIfAttributesChangedOnly(['updated_at']);
     }
 
     public function posts(): BelongsToMany

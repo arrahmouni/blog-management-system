@@ -65,7 +65,7 @@ class ActivityResource extends JsonResource
             return 'N/A';
         }
 
-        if (is_bool($value)) {
+        if (is_bool($value) || is_numeric($value)) {
             return $value ? 'true' : 'false';
         }
 

@@ -47,6 +47,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(log.created_at) }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
               <button
+                v-if="hasChanges(log)"
                 @click="openChangesModal(log)"
                 class="text-blue-500 hover:text-blue-700"
                 title="View Changes"
@@ -56,6 +57,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </button>
+            <span v-else class="text-gray-500 text-sm">No attribute changes</span>
+
             </td>
           </tr>
         </tbody>
@@ -176,5 +179,10 @@
     const closeModal = () => {
         isModalOpen.value = false;
         selectedLog.value = null;
+    };
+
+    const hasChanges = (log) => {
+        const noChangeEvents = ['deleted', 'restored'];
+        return !noChangeEvents.includes(log.event) && Object.keys(log.changes || {}).length > 0;
     };
 </script>
