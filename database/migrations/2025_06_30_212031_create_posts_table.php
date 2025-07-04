@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('body');
             $table->string('slug')->unique();
             $table->boolean('is_published')->default(false);
-            $table->date('published_at')->nullable();
+            $table->dateTime('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -23,8 +23,7 @@ class PostFactory extends Factory
             'user_id'       => User::factory()->writer(),
             'title'         => fake()->sentence(3),
             'body'          => fake()->paragraph(3),
-            'is_published'  => fake()->boolean(),
-            'published_at'  => fake()->dateTime(),
+            'is_published'  => fake()->boolean(75),
         ];
     }
 
@@ -34,7 +33,9 @@ class PostFactory extends Factory
             $randomCategories = Category::inRandomOrder()->limit(rand(1, 3))->pluck('id');
             $post->categories()->sync($randomCategories);
 
-            $randomImagePath = public_path('images/test/'. rand(1, 22) .'.png');
+            $randomImagePath = public_path('images/fake/'. rand(1, 22) .'.png');
+            $post->published_at = $post->is_published ? now() : null;
+            $post->save();
 
             $post->addMedia($randomImagePath)
             ->preservingOriginal()

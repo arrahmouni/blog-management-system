@@ -27,17 +27,31 @@ Route::controller(CategoryController::class)->middleware(['auth:sanctum', 'activ
 });
 
 // Admin And Writer Can Access
-Route::controller(PostController::class)->middleware(['auth:sanctum', 'can.post'])->prefix('post')->group(function () {
-    Route::get('/'              , 'index');
-    Route::get('{post}'         , 'show');
-    Route::post('/'             , 'store');
-    Route::post('{post}'        , 'update');
-    Route::delete('{post}'      , 'destroy');
+Route::controller(PostController::class)->middleware(['auth:sanctum'])->prefix('post')->group(function () {
+    Route::middleware('can.post')->group(function () {
+        Route::get('/'                  , 'index');
+        Route::get('{post}'             , 'show');
+        Route::post('/'                 , 'store');
+        Route::post('{post}'            , 'update');
+        Route::delete('{post}'          , 'destroy');
+    });
+
+    Route::middleware('active.admin')->group(function () {
+        Route::put('/{post}/approve'   , 'approve');
+        Route::put('/{post}/reject'    , 'reject');
+        Route::post('{post}/restore'    , 'restore');
+        Route::delete('{post}/force'    , 'forceDelete');
+    });
 });
 
-Route::controller(CommentController::class)->middleware(['auth:sanctum'])->prefix('post/{post}/comment')->group(function () {
-    Route::get('/'              , 'index');
-    Route::get('{comment}'      , 'show');
-    Route::post('/'             , 'store');
-    Route::delete('{comment}'   , 'destroy');
+Route::controller(CommentController::class)->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('post/{post}/comment')->group(function () {
+        Route::get('/'              , 'index');
+        Route::get('{comment}'      , 'show');
+        Route::post('/'             , 'store');
+        Route::delete('{comment}'   , 'destroy');
+    });
+
+    Route::put('comment/{comment}/accept', 'accept');
+    Route::put('comment/{comment}/reject', 'reject');
 });

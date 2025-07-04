@@ -69,7 +69,7 @@
 
                             <button
                                 v-if="item.deleted_at"
-                                @click="restoreCategory(item.id)"
+                                @click="restoreItem(item.id)"
                                 class="text-green-500 hover:text-green-700"
                                 title="Restore"
                             >
@@ -320,7 +320,7 @@
         clearErrors();
     };
 
-    const restoreCategory = async (id) => {
+    const restoreItem = async (id) => {
         try {
             const result = await Swal.fire({
                 title: 'Restore Category?',

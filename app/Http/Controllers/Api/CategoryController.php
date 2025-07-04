@@ -33,4 +33,11 @@ class CategoryController extends BaseApiController
             'id' => $request->category
         ]);
     }
+
+    public function canDelete($model)
+    {
+        if($model->posts()->exists()) return sendFailInternalResponse('Category has posts, cannot delete');
+
+        return sendSuccessInternalResponse();
+    }
 }

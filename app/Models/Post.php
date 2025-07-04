@@ -33,7 +33,7 @@ class Post extends Model implements HasMedia
 
     protected $appends = ['published_at_format', 'created_at_format', 'image_url'];
 
-    protected $with = ['categories'];
+    protected $with = ['categories', 'user'];
 
     public const MEDIA_COLLECTION = 'posts';
 
@@ -58,14 +58,16 @@ class Post extends Model implements HasMedia
         $user            = request()->user();
 
         if($user) {
-            if($user->isWriter()) {
+            if($user->isAdmin()) {
+                $modelCollection->withTrashed();
+            } elseif($user->isWriter()) {
                 $modelCollection->where('user_id', $user->id);
             } elseif($user->isUser()) {
                 $modelCollection->published();
             }
 
             if($isCollection) {
-                return $modelCollection->latest();
+                return $modelCollection->orderBy('id', 'desc');
             }
             return $modelCollection->findOrFail($data['id']);
         }
@@ -73,7 +75,7 @@ class Post extends Model implements HasMedia
         return null;
     }
 
-    public function writer(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

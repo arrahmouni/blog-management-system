@@ -24,7 +24,6 @@ class StorePostRequest extends BaseApiRequest
         $rules = [
             'title'             => ['required', 'string', 'min:2', 'max:255'],
             'body'              => ['required', 'string', 'min:2'],
-            'published_at'      => ['nullable', 'date'],
             'category_ids'      => ['required', 'array', 'min:1'],
             'category_ids.*'    => ['required', 'exists:categories,id'],
         ];

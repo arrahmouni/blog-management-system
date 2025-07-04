@@ -45,28 +45,14 @@ const routes = [
                 name: 'Categories',
                 meta: {requiredRole: 'admin'}
             },
-            // {
-            //     path: 'products',
-            //     component: Products,
-            //     name: 'Products'
-            // }
+            {
+                path: 'posts',
+                component: Posts,
+                name: 'Posts',
+                meta: {requiredRole: ['admin', 'writer']}
+            }
         ]
     },
-    // {
-    //     path: '/admin/email-verification',
-    //     component: () => import('../views/auth/EmailVerify.vue'),
-    //     meta: { guest: true }
-    // },
-    // {
-    //     path: '/admin/email-verification-success',
-    //     component: () => import('../views/auth/EmailVerifySuccess.vue'),
-    //     meta: { guest: true }
-    // },
-    // {
-    //     path: '/admin/email-verification-failed',
-    //     component: () => import('../views/auth/EmailVerifyFailure.vue'),
-    //     meta: { guest: true }
-    // },
     // {
     //     path: '/admin/forgot-password',
     //     component: () => import('../views/auth/ForgotPassword.vue'),
@@ -95,8 +81,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.meta.requiresAuth && !isAuthenticated) {
         next("/admin/login");
-    } else if (to.meta.requiredRole && to.meta.requiredRole !== userRole) {
-        next("/admin/unauthorized"); // Redirect to unauthorized page
+    }
+    else if (
+        to.meta.requiredRole &&
+        !to.meta.requiredRole.includes(userRole)
+    ) {
+        next("/admin/unauthorized");
     } else {
         next();
     }

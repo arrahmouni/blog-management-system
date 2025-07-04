@@ -41,7 +41,7 @@ class Comment extends Model
             }
 
             if($isCollection) {
-                return $modelCollection->latest();
+                return $modelCollection->where('post_id', $data['post_id'])->latest();
             }
 
             return $modelCollection->findOrFail($data['id']);

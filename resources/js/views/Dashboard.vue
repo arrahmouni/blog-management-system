@@ -82,15 +82,15 @@
                                         Categories
                                     </router-link>
                                 </li>
-                                <!-- <li>
+                                <li>
                                     <router-link
-                                        :to="{ name: 'Products' }"
+                                        :to="{ name: 'Posts' }"
                                         class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
                                         active-class="bg-gray-100"
                                     >
-                                        Products
+                                        Posts
                                     </router-link>
-                                </li> -->
+                                </li>
                             </ul>
                         </div>
                     </nav>

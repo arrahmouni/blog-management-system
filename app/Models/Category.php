@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -37,7 +36,9 @@ class Category extends Model
 
     public function getDataForApi($data, $isCollection = false) : mixed
     {
-        $modelCollection = $this->withTrashed();
+        $modelCollection = $this->query();
+
+        if(request()->user()->isAdmin()) $modelCollection->withTrashed();
 
         if($isCollection) {
             return $modelCollection->latest();

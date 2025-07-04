@@ -66,4 +66,30 @@ class CommentController extends BaseApiController
             'data' => new $this->modelResource($result),
         ]);
     }
+
+    public function accept(Request $request)
+    {
+        $result = $this->modelService->accept($request->comment);
+
+        if(is_array($result) && isset($result['success']) && ! $result['success']) {
+            return sendApiFailResponse($result['message'], $result['errors']);
+        }
+
+        return sendApiSuccessResponse('Accepted successfully', data: [
+            'data' => new $this->modelResource($result),
+        ]);
+    }
+
+    public function reject(Request $request)
+    {
+        $result = $this->modelService->reject($request->comment);
+
+        if(is_array($result) && isset($result['success']) && ! $result['success']) {
+            return sendApiFailResponse($result['message'], $result['errors']);
+        }
+
+        return sendApiSuccessResponse('Rejected successfully', data: [
+            'data' => new $this->modelResource($result),
+        ]);
+    }
 }

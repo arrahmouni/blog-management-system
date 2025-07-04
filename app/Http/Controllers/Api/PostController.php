@@ -33,4 +33,30 @@ class PostController extends BaseApiController
             'id' => $request->post
         ]);
     }
+
+    public function approve(Request $request)
+    {
+        $result = $this->modelService->approve($request->post);
+
+        if(is_array($result) && isset($result['success']) && ! $result['success']) {
+            return sendApiFailResponse($result['message'], $result['errors']);
+        }
+
+        return sendApiSuccessResponse('Approved successfully', data: [
+            'data' => new $this->modelResource($result),
+        ]);
+    }
+
+    public function reject(Request $request)
+    {
+        $result = $this->modelService->reject($request->post);
+
+        if(is_array($result) && isset($result['success']) && ! $result['success']) {
+            return sendApiFailResponse($result['message'], $result['errors']);
+        }
+
+        return sendApiSuccessResponse('Rejected successfully', data: [
+            'data' => new $this->modelResource($result),
+        ]);
+    }
 }

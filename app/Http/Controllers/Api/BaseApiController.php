@@ -29,8 +29,10 @@ class BaseApiController extends Controller
     }
 
     /**
+     * Merge data to request for collection
      *
-     * Merge Data To Request For Collection
+     *  @param Request $request
+     *  @return void
      */
     public function mergeDataToRequestForCollection(Request $request)
     {
@@ -38,7 +40,10 @@ class BaseApiController extends Controller
     }
 
     /**
-     * Merge Data To Request For Show, Update And Destroy
+     *  Merge data to request
+     *
+     *  @param Request $request
+     *  @return void
      */
     public function mergeDataToRequest(Request $request)
     {
@@ -46,7 +51,10 @@ class BaseApiController extends Controller
     }
 
     /**
-     * Send a listing of the resource to ajax.
+     *  Display a listing of the resource.
+     *
+     *  @param Request $request
+     *  @return void
      */
     public function index(Request $request)
     {
@@ -68,6 +76,9 @@ class BaseApiController extends Controller
 
     /**
      * Display the specified resource to api.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
@@ -82,6 +93,8 @@ class BaseApiController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function store()
     {
@@ -100,6 +113,8 @@ class BaseApiController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
@@ -117,7 +132,21 @@ class BaseApiController extends Controller
     }
 
     /**
+     * Check if the model can be deleted or not.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return array
+     */
+    public function canDelete($model)
+    {
+        return sendSuccessInternalResponse();
+    }
+
+    /**
      * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
@@ -125,12 +154,23 @@ class BaseApiController extends Controller
 
         $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
 
+        $result = $this->canDelete($this->data['model']);
+
+        if(! $result['success']) {
+            return sendApiFailResponse($result['message']);
+        }
+
         $this->data['model']->delete();
 
         return sendApiSuccessResponse('Deleted successfully');
     }
 
-
+    /**
+     * Restore the specified resource from database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function restore(Request $request)
     {
         $this->mergeDataToRequest($request);
@@ -142,11 +182,18 @@ class BaseApiController extends Controller
         return sendApiSuccessResponse('Restored successfully');
     }
 
+
     public function forceDelete(Request $request)
     {
         $this->mergeDataToRequest($request);
 
         $this->data['model'] = $this->model->getDataForApi($request->all(), isCollection: false);
+
+        $result = $this->canDelete($this->data['model']);
+
+        if(! $result['success']) {
+            return sendApiFailResponse($result['message']);
+        }
 
         $this->data['model']->forceDelete();
 

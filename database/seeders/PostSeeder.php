@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
     {
         Post::factory()
         ->count(10)
-        ->hasComments(10)
+        ->hasComments(100)
         ->create();
     }
 }

@@ -49,4 +49,28 @@ class CommentService extends BaseApiService
 
         return $model;
     }
+
+    public function accept($commentId)
+    {
+        $model = CrudModel::find($commentId);
+
+        if(!$model) return sendFailInternalResponse('Comment not found');
+
+        $model->is_accepted = true;
+        $model->save();
+
+        return $model->refresh();
+    }
+
+    public function reject($commentId)
+    {
+        $model = CrudModel::find($commentId);
+
+        if(!$model) return sendFailInternalResponse('Comment not found');
+
+        $model->is_accepted = false;
+        $model->save();
+
+        return $model->refresh();
+    }
 }
