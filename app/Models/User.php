@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRoles;
-use App\Enums\UserStatuses;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -77,16 +76,6 @@ class User extends Authenticatable
     public function isUser()
     {
         return $this->role === UserRoles::USER->value;
-    }
-
-    public function isActive()
-    {
-        return $this->status === UserStatuses::ACTIVE->value;
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('status', UserStatuses::ACTIVE->value);
     }
 
     public function posts(): HasMany

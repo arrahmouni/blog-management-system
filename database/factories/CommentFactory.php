@@ -30,7 +30,7 @@ class CommentFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Comment $comment) {
-            $comment->user_id     = User::active()->inRandomOrder()->first()->id;
+            $comment->user_id     = User::inRandomOrder()->first()->id;
             $comment->save();
             $comment->is_accepted = $comment->user->isAdmin() ? true : fake()->boolean();
             $comment->save();

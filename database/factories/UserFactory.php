@@ -3,10 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\UserRoles;
-use App\Enums\UserStatuses;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -27,7 +24,6 @@ class UserFactory extends Factory
     {
         return [
             'role'          => fake()->randomElement(UserRoles::all()),
-            'status'        => fake()->randomElement(UserStatuses::all()),
             'first_name'    => fake()->firstName(),
             'last_name'     => fake()->lastName(),
             'email'         => fake()->unique()->safeEmail(),
@@ -59,15 +55,6 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'role' => UserRoles::USER->value,
-            ];
-        });
-    }
-
-    public function active()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => UserStatuses::ACTIVE->value,
             ];
         });
     }

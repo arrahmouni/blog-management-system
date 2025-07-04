@@ -15,19 +15,19 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         if(! User::where('email', 'admin@example.com')->exists()) {
-            User::factory()->admin()->active()->hasPosts(5)->create([
+            User::factory()->admin()->hasPosts(5)->create([
                 'email' => 'admin@example.com',
             ]);
         }
 
         if(! User::where('email', 'writer@example.com')->exists()) {
-            User::factory()->writer()->active()->hasPosts(5)->create([
+            User::factory()->writer()->hasPosts(5)->create([
                 'email' => 'writer@example.com',
             ]);
         }
 
         if(! User::where('email', 'user@example.com')->exists()) {
-            User::factory()->user()->active()->create([
+            User::factory()->user()->create([
                 'email' => 'user@example.com',
             ]);
         }

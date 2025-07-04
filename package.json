@@ -19,8 +19,6 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
-        "@formkit/vue": "^1.6.9",
-        "formkit": "^1.6.9",
         "sweetalert2": "^11.22.2",
         "vue": "^3.5.17",
         "vue-loader": "^17.3.1",

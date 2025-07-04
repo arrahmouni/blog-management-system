@@ -48,7 +48,7 @@ class AuthService extends BaseApiService
         $field = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         if (Auth::attemptWhen([$field => $data['login'], 'password' => $data['password']], function(User $user) {
-            return $user->isActive() && ($user->isAdmin() || $user->isWriter());
+            return $user->isAdmin() || $user->isWriter();
         })) {
             $user  = Auth::user();
             $token = $this->createToken($user);
