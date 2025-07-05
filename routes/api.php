@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\PostController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('register'              , 'register');
-    Route::post('login'                 , 'login');
+    Route::post('login'                 , 'loginToAdminPanel');
     Route::post('logout'                , 'logout')->middleware('auth:sanctum');
     Route::post('forgot-password'       , 'sendResetPasswordLink')->middleware(['throttle:3,1']);
     Route::post('reset-password'        , 'resetPassword');

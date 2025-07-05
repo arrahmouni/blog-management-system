@@ -27,9 +27,9 @@ class AuthController extends BaseApiController
         return sendApiSuccessResponse($response['message'], $response['data']);
     }
 
-    public function login(LoginRequest $request)
+    public function loginToAdminPanel(LoginRequest $request)
     {
-        $response = $this->authService->login($request->validated());
+        $response = $this->authService->loginToAdminPanel($request->validated());
 
         if(! $response['success']) {
             return sendApiFailResponse($response['message'], code: $response['code'] ?? HttpStatusCode::BAD_REQUEST->value);

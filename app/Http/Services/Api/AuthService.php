@@ -43,7 +43,7 @@ class AuthService extends BaseApiService
      * @param array $data
      * @return array
      */
-    public function login(array $data): array
+    public function loginToAdminPanel(array $data): array
     {
         $field = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 

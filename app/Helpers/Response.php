@@ -53,8 +53,8 @@ if(!function_exists('sendFailInternalResponse'))
             'success' => false,
             'code'    => $code,
             'message' => $message,
-            'data'    => (object) [],
-            'errors'  => (object) $errors,
+            'data'    => [],
+            'errors'  => $errors,
         ];
     }
 }

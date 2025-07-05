@@ -34,12 +34,17 @@ class Comment extends Model
         });
 
         static::updated(function ($comment) {
-            if($comment->isDirty('is_accepted') && $comment->is_accepted) {
+            if (
+                $comment->wasChanged('is_accepted') &&
+                (bool) $comment->getOriginal('is_accepted') !== (bool) $comment->is_accepted &&
+                $comment->is_accepted
+            ) {
                 $comment->post->user->notify(
                     new NewCommentNotification($comment, $comment->post)
                 );
             }
         });
+
     }
 
 

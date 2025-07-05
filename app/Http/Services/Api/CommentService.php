@@ -52,6 +52,10 @@ class CommentService extends BaseApiService
 
     public function approve($model)
     {
+        if($model->is_accepted) {
+            // return sendFailInternalResponse('Comment already approved');
+        }
+
         $model->is_accepted = true;
         $model->save();
 
