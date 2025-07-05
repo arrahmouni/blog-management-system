@@ -53,7 +53,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">{{ post.slug }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span :class="statusClasses(post.is_published && !post.deleted_at)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                                {{ post.is_published && !post.deleted_at ? "Published" : "Draft" }}
+                                {{ post.is_published && !post.deleted_at ? "Published" : "Pending Approval" }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ post.published_at }}</td>
@@ -460,9 +460,9 @@
                         </button>
                     </div>
 
-                    <div v-if="isAdmin" class="flex justify-end space-x-2">
+                    <div class="flex justify-end space-x-2">
                         <button
-                            v-if="!currentPost.is_published && !currentPost.deleted_at"
+                            v-if="isAdmin && !currentPost.is_published && !currentPost.deleted_at"
                             @click="approvePost(currentPost)"
                             class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                         >

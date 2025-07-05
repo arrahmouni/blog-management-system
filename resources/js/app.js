@@ -8,6 +8,7 @@ import router from './router'
 import axios from "axios";
 import vSelect from 'vue-select'
 import VueTheMask from 'vue-the-mask'
+import Notifications from './views/components/Notifications.vue'
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://127.0.0.1:8000/api/v1";
@@ -48,7 +49,7 @@ axios.interceptors.response.use(
 
 // Use the plugin
 app.use(Toast, toastOptions);
-
+app.component('Notifications', Notifications);
 app.component('v-select', vSelect)
 app.use(VueTheMask)
 

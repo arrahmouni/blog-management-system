@@ -19,10 +19,10 @@ class CommentService extends BaseApiService
      */
     public function createModel(array $data, $post): mixed
     {
-        $user                 = request()->user();
-        $modelData            = $this->prepareModelData($data);
-        $modelData['user_id'] = $user->id;
-        $model['is_accepted'] = $user->isAdmin() ? true : false;
+        $user                     = request()->user();
+        $modelData                = $this->prepareModelData($data);
+        $modelData['user_id']     = $user->id;
+        $modelData['is_accepted'] = $user->isAdmin() ? true : false;
 
         $model = DB::transaction(function () use($data, $modelData, $post) {
             $model = $post->comments()->create($modelData);
