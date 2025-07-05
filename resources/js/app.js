@@ -6,7 +6,6 @@ import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import router from './router'
 import axios from "axios";
-import { plugin as formKitPlugin, defaultConfig } from '@formkit/vue'
 import vSelect from 'vue-select'
 import VueTheMask from 'vue-the-mask'
 
@@ -50,7 +49,6 @@ axios.interceptors.response.use(
 // Use the plugin
 app.use(Toast, toastOptions);
 
-app.use(formKitPlugin, defaultConfig)
 app.component('v-select', vSelect)
 app.use(VueTheMask)
 
