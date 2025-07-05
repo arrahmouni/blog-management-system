@@ -69,8 +69,4 @@ class CommentPolicy
         return $user->isAdmin();
     }
 
-    public function reject(User $user, Comment $comment): bool
-    {
-        return $user->isAdmin();
-    }
 }

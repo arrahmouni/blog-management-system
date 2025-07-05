@@ -66,19 +66,4 @@ class CommentController extends BaseApiController
             'data' => new $this->modelResource($result),
         ]);
     }
-
-    public function reject(Comment $comment)
-    {
-        Gate::authorize('reject', $comment);
-
-        $result = $this->modelService->reject($comment);
-
-        if(is_array($result) && isset($result['success']) && ! $result['success']) {
-            return sendApiFailResponse($result['message'], $result['errors']);
-        }
-
-        return sendApiSuccessResponse('Rejected successfully', data: [
-            'data' => new $this->modelResource($result),
-        ]);
-    }
 }

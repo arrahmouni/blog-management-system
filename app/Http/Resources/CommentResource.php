@@ -19,6 +19,7 @@ class CommentResource extends JsonResource
             'comment'           => $this->body,
             'is_accepted'       => (bool) $this->is_accepted,
             'created_at'        => $this->created_at_format,
+            'deleted_at'        => $this->deleted_at,
             'post'              => $this->whenLoaded('post', function () {
                 return new PostResource($this->post);
             }),

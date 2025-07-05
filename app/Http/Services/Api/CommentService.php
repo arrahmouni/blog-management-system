@@ -57,12 +57,4 @@ class CommentService extends BaseApiService
 
         return $model->refresh();
     }
-
-    public function reject($model)
-    {
-        $model->is_accepted = false;
-        $model->save();
-
-        return $model->refresh();
-    }
 }

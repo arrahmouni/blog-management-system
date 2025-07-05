@@ -33,9 +33,8 @@ Route::controller(PostController::class)->middleware(['auth:sanctum'])->prefix('
         Route::post('/'                 , 'store');
         Route::post('{post}'            , 'update');
         Route::delete('{post}'          , 'destroy');
-        Route::get('{id}/logs'        , 'logs');
+        Route::get('{id}/logs'          , 'logs');
         Route::put('/{post}/approve'    , 'approve');
-        Route::put('/{post}/reject'     , 'reject');
         Route::post('{post}/restore'    , 'restore');
         Route::delete('{post}/force'    , 'forceDelete');
 });
@@ -45,9 +44,8 @@ Route::controller(CommentController::class)->middleware(['auth:sanctum'])->group
         Route::get('/'              , 'index');
         Route::get('{comment}'      , 'show');
         Route::post('/'             , 'store');
-        Route::delete('{comment}'   , 'destroy');
     });
 
     Route::put('comment/{comment}/accept', 'approve');
-    Route::put('comment/{comment}/reject', 'reject');
+    Route::delete('comment/{comment}'    , 'destroy');
 });

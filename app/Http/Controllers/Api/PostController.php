@@ -41,19 +41,4 @@ class PostController extends BaseApiController
             'data' => new $this->modelResource($result),
         ]);
     }
-
-    public function reject(Post $post)
-    {
-        Gate::authorize('reject', $post);
-
-        $result = $this->modelService->reject($post);
-
-        if(is_array($result) && isset($result['success']) && ! $result['success']) {
-            return sendApiFailResponse($result['message'], $result['errors']);
-        }
-
-        return sendApiSuccessResponse('Rejected successfully', data: [
-            'data' => new $this->modelResource($result),
-        ]);
-    }
 }

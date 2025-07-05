@@ -422,7 +422,7 @@
 
                                             <div v-if="isAdmin" class="ml-auto flex space-x-2">
                                                 <button
-                                                    v-if="!comment.is_accepted"
+                                                    v-if="!comment.is_accepted && !comment.deleted_at"
                                                     @click="acceptComment(comment)"
                                                     :disabled="comment.loading"
                                                     class="text-xs px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
@@ -432,13 +432,13 @@
                                                 </button>
 
                                                 <button
-                                                    v-if="comment.is_accepted"
-                                                    @click="rejectComment(comment)"
-                                                    :disabled="comment.loading"
+                                                    v-if="!comment.deleted_at"
+                                                    @click="deleteComment(comment)"
+                                                    :disabled="comment.loading_delete"
                                                     class="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                                                 >
-                                                    <span v-if="comment.loading">Processing...</span>
-                                                    <span v-else>Reject</span>
+                                                    <span v-if="comment.loading_delete">Processing...</span>
+                                                    <span v-else>Delete</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -467,14 +467,6 @@
                             class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                         >
                             Approve & Publish
-                        </button>
-
-                        <button
-                            v-if="currentPost.is_published && !currentPost.deleted_at"
-                            @click="unpublishPost(currentPost)"
-                            class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
-                        >
-                            Reject & Unpublish
                         </button>
 
                         <button
@@ -558,7 +550,6 @@
         }
     };
 
-
     const fetchComments = async (page = 1) => {
         try {
             if (page === 1) {
@@ -616,17 +607,6 @@
         }
     };
 
-    const unpublishPost = async (post) => {
-        try {
-            await axios.put(`/post/${post.id}/reject`);
-            await fetchData();
-            toast.success("Post unpublished!");
-            closeViewModal();
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }
-    };
-
     const acceptComment = async (comment) => {
         try {
             comment.loading = true;
@@ -641,17 +621,17 @@
         }
     };
 
-    const rejectComment = async (comment) => {
+    const deleteComment = async (comment) => {
         try {
-            comment.loading = true;
-            await axios.put(`/comment/${comment.id}/reject`);
-            comment.is_accepted = false;
-            toast.success("Comment rejected");
+            comment.loading_delete = true;
+            await axios.delete(`/comment/${comment.id}`);
+            toast.success("Comment deleted successfully");
+            comments.value = comments.value.filter((c) => c.id !== comment.id);
         } catch (error) {
             toast.error(error.response.data.message);
-            console.error("Comment rejection error:", error.response?.data || error.message);
+            console.error("Comment deletion error:", error.response?.data || error.message);
         } finally {
-            comment.loading = false;
+            comment.loading_delete = false;
         }
     };
 
