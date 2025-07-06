@@ -93,16 +93,19 @@
             if(!createdComment.data.data.is_accepted) {
                 return
             }
+
             comments.value.unshift({
                 id: Date.now().toString(),
                 comment: newComment.content,
                 created_at: new Date().toISOString(),
                 user: {
-                    full_name: "You",
+                    full_name: createdComment.data.data.full_name,
                     avatar_url: "https://ui-avatars.com/api/?name=You&background=random"
                 },
                 ...createdComment.data.data
             });
+
+            pagination.value.total += 1;
         } catch (err) {
             console.error('Failed to add comment:', err);
         }

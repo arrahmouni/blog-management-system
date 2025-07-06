@@ -56,7 +56,7 @@ class HomeController extends BaseApiController
 
         $page                   = $request->has('page') ? $request->page : 1;
         $perPage                = config('app.pagination');
-        $this->data['data']     = $query->paginate($perPage, ['*'], 'page', $page);
+        $this->data['data']     = $query->latest()->paginate($perPage, ['*'], 'page', $page);
         $this->data['paginate'] = new PaginateResource($this->data['data']);
 
         return sendApiSuccessResponse(data: [

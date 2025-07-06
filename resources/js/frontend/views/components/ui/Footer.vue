@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <!-- <div>
+                <div>
                     <h3 class="text-lg font-semibold">Company</h3>
                     <div class="mt-4 space-y-2 footer-links">
                         <a href="#" class="block text-gray-400 hover:text-white">About Us</a>
@@ -56,12 +56,12 @@
                         Subscribe to stay updated with our latest blog posts.
                     </p>
                     <form class="mt-4 flex">
-                        <input type="email" placeholder="Your email address" class="px-4 py-2 w-full rounded-l-lg focus:outline-none text-gray-800">
+                        <!-- <input type="email" placeholder="Your email address" class="px-4 py-2 w-full rounded-l-lg focus:outline-none text-gray-800">
                         <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700">
                             <i class="fas fa-paper-plane"></i>
-                        </button>
+                        </button> -->
                     </form>
-                </div> -->
+                </div>
             </div>
 
             <div class="mt-12 pt-8 border-t border-gray-800 text-center">

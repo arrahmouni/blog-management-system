@@ -29,7 +29,7 @@ class CommentService extends BaseApiService
 
             return $model->refresh();
         });
-
+        $model->load('user');
         return $model;
     }
 
