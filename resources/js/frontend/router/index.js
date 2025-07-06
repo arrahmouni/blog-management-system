@@ -8,6 +8,7 @@ import NotFound         from '../views/errors/404.vue'
 import Unauthorized     from '../views/errors/403.vue'
 import ForgotPassword   from '../views/auth/ForgotPassword.vue';
 import ResetPassword    from '../views/auth/ResetPassword.vue';
+import PostsList        from '../views/PostsList.vue';
 
 const routes = [
     {
@@ -21,6 +22,10 @@ const routes = [
     {
         path        : '/',
         component   : Home,
+    },
+    {
+        path        : '/posts',
+        component   : PostsList
     },
     {
         path        : '/post/:slug',

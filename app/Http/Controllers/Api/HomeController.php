@@ -17,7 +17,7 @@ class HomeController extends BaseApiController
 {
     public function posts(Request $request)
     {
-        $query = Post::published();
+        $query = Post::published()->withCount('comments');
 
         if($request->featured) {
             $query = $query->HasMostComments();

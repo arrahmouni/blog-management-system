@@ -98,7 +98,6 @@
     const submitComment = () => {
         if (newComment.value.trim()) {
             const isAuthenticated = localStorage.getItem("authToken");
-
             if (!isAuthenticated) {
                 router.push({
                     name: 'Login',
