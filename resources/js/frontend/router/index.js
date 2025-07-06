@@ -1,49 +1,65 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUser } from "../../admin/composables/useUser";
-import Home from '../views/Home.vue';
-import PostDetails from '../views/components/post/PostDetails.vue';
-import Login from '../views/auth/Login.vue';
-import Register from '../views/auth/Register.vue'
-import NotFound from '../views/errors/404.vue'
-import Unauthorized from '../views/errors/403.vue'
+import { useUser }      from "../../admin/composables/useUser";
+import Home             from '../views/Home.vue';
+import PostDetails      from '../views/components/post/PostDetails.vue';
+import Login            from '../views/auth/Login.vue';
+import Register         from '../views/auth/Register.vue'
+import NotFound         from '../views/errors/404.vue'
+import Unauthorized     from '../views/errors/403.vue'
+import ForgotPassword   from '../views/auth/ForgotPassword.vue';
+import ResetPassword    from '../views/auth/ResetPassword.vue';
 
 const routes = [
     {
-        path: '/:pathMatch(.*)*',
-        component: NotFound
+        path        : '/:pathMatch(.*)*',
+        component   : NotFound
     },
     {
-        path: '/unauthorized',
-        component: Unauthorized
+        path        : '/unauthorized',
+        component   : Unauthorized
     },
     {
-        path: '/',
-        component: Home,
+        path        : '/',
+        component   : Home,
     },
     {
-        path: '/post/:slug',
-        component: PostDetails,
-        name: 'PostDetails',
-        props: true,
+        path        : '/post/:slug',
+        component   : PostDetails,
+        name        : 'PostDetails',
+        props       : true,
     },
     {
-        path: '/login',
-        component: Login,
-        name: 'Login',
-        meta: { guest: true }
+        path        : '/login',
+        component   : Login,
+        name        : 'Login',
+        meta        : { guest: true }
     },
     {
-        path: '/register',
-        component: Register,
-        name: 'Register',
-        meta: { guest: true }
+        path        : '/register',
+        component   : Register,
+        name        : 'Register',
+        meta        : { guest: true }
+    },
+        {
+        path        : '/forgot-password',
+        component   : ForgotPassword,
+        meta        : { guest: true }
+    },
+    {
+        path        : '/reset-password',
+        component   : ResetPassword,
+        meta        : { guest: true },
+        props       : (route) => ({
+            token   : route.query.token,
+            email   : route.query.email
+        })
     }
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
-})
+});
 
 router.beforeEach(async (to, from, next) => {
     const { getRole } = useUser();

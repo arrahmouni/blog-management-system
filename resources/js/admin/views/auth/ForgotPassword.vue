@@ -63,7 +63,7 @@
 
     const submitForgotPassword = async () => {
         try {
-            await handleForgotPassword (form.email);
+            await handleForgotPassword (form.email, '/admin/login');
         } catch (err) {
             console.error("Error:", err);
         }

@@ -97,7 +97,8 @@
                 email,
                 token,
                 form.password,
-                form.password_confirmation
+                form.password_confirmation,
+                '/admin/login'
             );
         } catch (error) {
             if(error.status == 410) {

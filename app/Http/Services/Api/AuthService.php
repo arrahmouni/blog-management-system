@@ -105,7 +105,7 @@ class AuthService extends BaseApiService
             ]
         );
 
-        Mail::to($user->email)->send(new PasswordResetLink($token, $user->email));
+        Mail::to($user->email)->send(new PasswordResetLink($token, $user->email, $user->role));
 
         return sendSuccessInternalResponse('Password reset link sent successfully');
     }

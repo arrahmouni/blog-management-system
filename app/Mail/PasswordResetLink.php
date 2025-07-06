@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Enums\UserRoles;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,7 +17,7 @@ class PasswordResetLink extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $token, private string $email)
+    public function __construct(private string $token, private string $email, private string $role)
     {
     }
 
@@ -35,10 +36,13 @@ class PasswordResetLink extends Mailable
      */
     public function content(): Content
     {
+        $url = $this->role === UserRoles::ADMIN->value ? '/admin/reset-password?' : '/reset-password?';
+        $url = url($url . http_build_query(['token' => $this->token, 'email' => $this->email]));
+        
         return new Content(
             view: 'emails.reset_password',
             with: [
-                'resetUrl' => url('/admin/reset-password?' . http_build_query(['token' => $this->token, 'email' => $this->email])),
+                'resetUrl' => $url
             ]
         );
     }

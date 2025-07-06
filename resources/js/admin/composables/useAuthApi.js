@@ -51,7 +51,7 @@ export const useAuthApi = () => {
         };
     };
 
-    const handleForgotPassword = async (email) => {
+    const handleForgotPassword = async (email, target) => {
         try {
             isLoading.value = true;
             error.value = null;
@@ -65,7 +65,7 @@ export const useAuthApi = () => {
             messageClass.value   = "bg-green-100 text-green-800";
             toast.success("Password reset link sent to your email!");
 
-            router.push("/admin/login");
+            router.push(target);
         } catch (err) {
             error.value = err;
             message.value =
@@ -78,7 +78,7 @@ export const useAuthApi = () => {
         }
     };
 
-    const handleResetPassword = async (email, token, password, password_confirmation) => {
+    const handleResetPassword = async (email, token, password, password_confirmation, target) => {
         try {
             isLoading.value = true;
             error.value = null;
@@ -95,7 +95,7 @@ export const useAuthApi = () => {
             messageClass.value = "bg-green-100 text-green-800";
             toast.success("Password reset successfully!");
 
-            router.push("/admin/login");
+            router.push(target);
         } catch (err) {
             error.value = err;
             message.value =
