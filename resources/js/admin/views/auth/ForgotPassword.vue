@@ -50,9 +50,9 @@
 
 <script setup>
     import { reactive, watch, ref  } from "vue";
-    import { useFormValidation } from "@/composables/useFormValidation";
-    import { useAuthApi } from '@/composables/useAuthApi';
-    import ErrorMessage from "@/views/components/ErrorMessage.vue";
+    import { useFormValidation } from "../../composables/useFormValidation";
+    import { useAuthApi } from '../../composables/useAuthApi';
+    import ErrorMessage from "../../views/components/ErrorMessage.vue";
 
     const initialFormState  = reactive({
         email: "",

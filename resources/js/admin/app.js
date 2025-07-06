@@ -54,4 +54,4 @@ app.component('v-select', vSelect)
 app.use(VueTheMask)
 
 // Mount the app
-app.use(router).mount('#app');
+app.use(router).mount('#admin-app');

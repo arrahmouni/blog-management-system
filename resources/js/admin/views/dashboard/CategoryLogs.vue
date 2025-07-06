@@ -118,8 +118,8 @@
 <script setup>
     import { ref, computed, onMounted } from "vue";
     import { useRoute, useRouter } from "vue-router";
-    import usePaginationFetcher from "@/composables/usePaginationFetcher";
-    import PaginationControls from "@/views/components/PaginationControls.vue";
+    import usePaginationFetcher from "../../composables/usePaginationFetcher";
+    import PaginationControls from "../../views/components/PaginationControls.vue";
     import axios from "axios";
     import { useToast } from "vue-toastification";
 

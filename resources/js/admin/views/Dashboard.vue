@@ -110,7 +110,7 @@
     import { useRouter } from "vue-router";
     import { useToast } from "vue-toastification";
     import axios from "axios";
-    import { useUser } from "@/composables/useUser";
+    import { useUser } from "../composables/useUser";
     const { isAdmin, isWriter } = useUser();
 
     const isDropdownOpen = ref(false);

@@ -199,13 +199,13 @@
 </template>
 
 <script setup>
-    import usePaginationFetcher from "@/composables/usePaginationFetcher";
-    import PaginationControls from "@/views/components/PaginationControls.vue";
+    import usePaginationFetcher from "../../composables/usePaginationFetcher";
+    import PaginationControls from "../../views/components/PaginationControls.vue";
     import { ref } from "vue";
     import axios from "axios";
     import { useToast } from "vue-toastification";
-    import { useFormValidation } from "@/composables/useFormValidation";
-    import ErrorMessage from "@/views/components/ErrorMessage.vue";
+    import { useFormValidation } from "../../composables/useFormValidation";
+    import ErrorMessage from "../../views/components/ErrorMessage.vue";
     import Swal from 'sweetalert2'
 
     const {

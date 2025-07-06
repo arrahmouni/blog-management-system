@@ -22,6 +22,7 @@ class PostResource extends JsonResource
             'image_url'         => $this->image_url,
             'is_published'      => (bool) $this->is_published,
             'published_at'      => $this->published_at_format,
+            'comments_count'    => $this->whenCounted('comments'),
             'created_at'        => $this->created_at_format,
             'deleted_at'        => $this->deleted_at,
             'categories'        => $this->whenLoaded('categories', function () {

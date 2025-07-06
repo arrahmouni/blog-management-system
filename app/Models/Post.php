@@ -115,4 +115,11 @@ class Post extends Model implements HasMedia
     {
         return $query->where('is_published', true);
     }
+
+    public function scopeHasMostComments($query)
+    {
+        return $query->withCount(['comments' => function ($query) {
+            $query->accepted();
+        }])->orderBy('comments_count', 'desc');
+    }
 }

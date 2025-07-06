@@ -5,6 +5,7 @@ export const useUser = () => {
 
     const isAdmin = computed(() => getRole() === "admin");
     const isWriter = computed(() => getRole() === "writer");
+    const isUser = computed(() => getRole() === "user");
 
-    return { getRole, isAdmin, isWriter };
+    return { getRole, isAdmin, isWriter, isUser };
 };
