@@ -54,6 +54,8 @@ Route::controller(CommentController::class)->middleware(['auth:sanctum'])->group
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('posts-list'           , 'posts');
+    Route::get('categories-list'      , 'categories');
+    Route::get('authors-list'         , 'authors');
     Route::get('post-details/{slug}'  , 'PostDetails');
     Route::get('post-comments/{post}' , 'postComments');
 });

@@ -18,6 +18,7 @@ class CategoryResource extends JsonResource
             'id'            => $this->id,
             'title'         => $this->title,
             'slug'          => $this->slug,
+            'post_count'    => $this->whenCounted('posts'),
             'created_at'    => $this->created_at_format,
             'deleted_at'    => $this->deleted_at
         ];

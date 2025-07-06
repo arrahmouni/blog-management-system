@@ -87,4 +87,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UpgradeRequests::class);
     }
+
+    public function scopeWithMostPosts($query)
+    {
+        return $query->withCount('posts')->orderBy('posts_count', 'desc');
+    }
 }
