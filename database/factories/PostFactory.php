@@ -33,7 +33,7 @@ class PostFactory extends Factory
             $randomCategories = Category::inRandomOrder()->limit(rand(1, 3))->pluck('id');
             $post->categories()->sync($randomCategories);
 
-            $randomImagePath = public_path('images/fake/'. rand(1, 22) .'.png');
+            $randomImagePath = $this->getImagePath();
             $post->published_at = $post->is_published ? now() : null;
             $post->save();
 
@@ -42,4 +42,20 @@ class PostFactory extends Factory
             ->toMediaCollection(Post::MEDIA_COLLECTION);
         });
     }
+
+    private function getImagePath(): string
+    {
+        // Get random product image
+        $imageFiles = glob(public_path('images/fake/*.{jpg,jpeg,png,gif}'), GLOB_BRACE);
+
+        if (empty($imageFiles)) {
+            throw new \Exception('No product images found in public/images/products');
+        }
+
+        // Create fake uploaded file
+        $randomImagePath = fake()->randomElement($imageFiles);
+
+        return $randomImagePath;
+    }
+
 }

@@ -124,10 +124,10 @@
 
 <script setup>
     import { reactive, watch, ref } from "vue";
-    import { useRoute, useRouter } from "vue-router";
-    import { useAuthApi } from '../../../admin/composables/useAuthApi';
-    import { useFormValidation } from "../../../admin/composables/useFormValidation";
-    import ErrorMessage from "../../../admin/views/components/ErrorMessage.vue";
+    import { useRoute, useRouter }  from "vue-router";
+    import { useAuthApi }           from '../../../admin/composables/useAuthApi';
+    import { useFormValidation }    from "../../../admin/composables/useFormValidation";
+    import ErrorMessage             from "../../../admin/views/components/ErrorMessage.vue";
 
     const initialFormState = reactive({
         password: "",
