@@ -3,6 +3,7 @@ import { useUser } from "../../admin/composables/useUser";
 import Home from '../views/Home.vue';
 import PostDetails from '../views/components/post/PostDetails.vue';
 import Login from '../views/auth/Login.vue';
+import Register from '../views/auth/Register.vue'
 import NotFound from '../views/errors/404.vue'
 import Unauthorized from '../views/errors/403.vue'
 
@@ -29,6 +30,12 @@ const routes = [
         path: '/login',
         component: Login,
         name: 'Login',
+        meta: { guest: true }
+    },
+    {
+        path: '/register',
+        component: Register,
+        name: 'Register',
         meta: { guest: true }
     }
 ]

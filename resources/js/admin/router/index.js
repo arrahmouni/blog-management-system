@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from "../composables/useUser";
 
 import Login from '../views/auth/Login.vue'
-import Register from '../views/auth/Register.vue'
 import NotFound from '../views/errors/404.vue'
 import DashboardHome from "../views/dashboard/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
@@ -16,11 +15,6 @@ const routes = [
     {
         path: '/admin/login',
         component: Login,
-        meta: { guest: true }
-    },
-    {
-        path: '/admin/register',
-        component: Register,
         meta: { guest: true }
     },
     {
