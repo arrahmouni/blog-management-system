@@ -38,7 +38,7 @@ class PasswordResetLink extends Mailable
         return new Content(
             view: 'emails.reset_password',
             with: [
-                'resetUrl' => url('/api/v1/reset-password?' . http_build_query(['token' => $this->token, 'email' => $this->email])),
+                'resetUrl' => url('/admin/reset-password?' . http_build_query(['token' => $this->token, 'email' => $this->email])),
             ]
         );
     }

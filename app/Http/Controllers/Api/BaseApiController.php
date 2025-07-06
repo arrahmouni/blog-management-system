@@ -60,9 +60,9 @@ class BaseApiController extends Controller
      */
     public function logs(Request $request)
     {
-        Gate::authorize('showLog', $this->model);
+        Gate::authorize('showLog', $this->model->find($request->id));
 
-        $this->data['page']     = $request->has('page') ? $request->page : 1;
+        $this->data['page'] = $request->has('page') ? $request->page : 1;
 
         $perPage = config('app.pagination');
 

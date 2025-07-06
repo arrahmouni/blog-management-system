@@ -93,6 +93,24 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="mb-6" v-if="isAdmin">
+                            <p
+                                class="text-sm font-semibold text-gray-500 mb-2"
+                            >
+                                User Management
+                            </p>
+                            <ul class="space-y-2" >
+                                <li >
+                                    <router-link
+                                        :to="{ name: 'UpgradeRequests' }"
+                                        class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                                        active-class="bg-gray-100"
+                                    >
+                                        Upgrade Requests
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
                 </div>
             </aside>

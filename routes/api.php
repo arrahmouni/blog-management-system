@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\UpgradeRequestController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('register'              , 'register');
@@ -17,7 +18,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('user'                   , 'showUserInfo')->middleware('auth:sanctum');
 });
 
-// Only Admin Can Access
 Route::controller(CategoryController::class)->middleware(['auth:sanctum'])->prefix('category')->group(function () {
     Route::get('/'                      , 'index');
     Route::get('{category}'             , 'show');
@@ -56,4 +56,13 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('posts-list'           , 'posts');
     Route::get('post-details/{slug}'  , 'PostDetails');
     Route::get('post-comments/{post}' , 'postComments');
+});
+
+Route::controller(UpgradeRequestController::class)->middleware(['auth:sanctum'])->prefix('upgrade-request')->group(function () {
+    Route::get('/'                          , 'index');
+    Route::get('{upgradeRequests}'          , 'show');
+    Route::get('get/status'                 , 'getStatus');
+    Route::post('/apply'                    , 'apply');
+    Route::post('{upgradeRequests}/accept'  , 'accept');
+    Route::post('{upgradeRequests}/reject'  , 'reject');
 });

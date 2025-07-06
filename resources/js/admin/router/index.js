@@ -1,82 +1,89 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from "../composables/useUser";
 
-import Login from '../views/auth/Login.vue'
-import NotFound from '../views/errors/404.vue'
-import DashboardHome from "../views/dashboard/Home.vue";
-import Dashboard from "../views/Dashboard.vue";
-import Unauthorized from "../views/errors/403.vue";
-import Categories from '../views/dashboard/Categories.vue';
-import Posts from '../views/dashboard/Posts.vue';
-import CategoryLogs from '../views/dashboard/CategoryLogs.vue';
-import PostLogs from '../views/dashboard/PostLogs.vue';
+import Login            from '../views/auth/Login.vue'
+import NotFound         from '../views/errors/404.vue'
+import DashboardHome    from '../views/dashboard/Home.vue';
+import Dashboard        from '../views/Dashboard.vue';
+import Unauthorized     from '../views/errors/403.vue';
+import Categories       from '../views/dashboard/Categories.vue';
+import Posts            from '../views/dashboard/Posts.vue';
+import CategoryLogs     from '../views/dashboard/CategoryLogs.vue';
+import PostLogs         from '../views/dashboard/PostLogs.vue';
+import UpgradeRequests  from '../views/dashboard/UpgradeRequests.vue';
 
 const routes = [
     {
-        path: '/admin/login',
-        component: Login,
-        meta: { guest: true }
+        path        : '/admin/login',
+        component   : Login,
+        meta        : { guest: true }
     },
     {
-        path: '/admin/:pathMatch(.*)*',
-        component: NotFound
+        path        : '/admin/:pathMatch(.*)*',
+        component   : NotFound
     },
     {
-        path: '/admin/unauthorized',
-        component: Unauthorized
+        path        : '/admin/unauthorized',
+        component   : Unauthorized
     },
     {
-        path: '/admin/dashboard',
-        component: Dashboard,
-        meta: { requiresAuth: true },
-        children: [
+        path        : '/admin/dashboard',
+        component   : Dashboard,
+        meta        : { requiresAuth: true },
+        children    : [
             {
-                path: '',
-                component: DashboardHome,
-                name: 'Home'
+                path        : '',
+                component   : DashboardHome,
+                name        : 'Home'
             },
             {
-                path: 'categories',
-                component: Categories,
-                name: 'Categories',
-                meta: {requiredRole: 'admin'}
+                path        : 'categories',
+                component   : Categories,
+                name        : 'Categories',
+                meta        : {requiredRole: 'admin'}
             },
             {
-                path: 'categories/:id/logs',
-                name: 'category-logs',
-                component: CategoryLogs,
-                props: true,
-                meta: {requiredRole: 'admin'}
+                path        : 'categories/:id/logs',
+                name        : 'category-logs',
+                component   : CategoryLogs,
+                props       : true,
+                meta        : {requiredRole: 'admin'}
             },
             {
-                path: 'posts',
-                component: Posts,
-                name: 'Posts',
-                meta: {requiredRole: ['admin', 'writer']}
+                path        : 'posts',
+                component   : Posts,
+                name        : 'Posts',
+                meta        : {requiredRole: ['admin', 'writer']}
             },
             {
-                path: 'posts/:id/logs',
-                name: 'post-logs',
-                component: PostLogs,
-                props: true,
-                meta: {requiredRole: ['admin', 'writer']}
+                path        : 'posts/:id/logs',
+                name        : 'post-logs',
+                component   : PostLogs,
+                props       : true,
+                meta        : {requiredRole: ['admin', 'writer']}
+            },
+            {
+                path        : 'upgrade-requests',
+                component   : UpgradeRequests,
+                name        : 'UpgradeRequests',
+                meta        : {requiredRole: 'admin'}
             }
         ]
     },
-    // {
-    //     path: '/admin/forgot-password',
-    //     component: () => import('../views/auth/ForgotPassword.vue'),
-    //     meta: { guest: true }
-    // },
-    // {
-    //     path: '/admin/reset-password',
-    //     component: () => import('../views/auth/ResetPassword.vue'),
-    //     meta: { guest: true },
-    //     props: (route) => ({
-    //         token: route.query.token,
-    //         email: route.query.email
-    //     })
-    // }
+    {
+        path        : '/admin/forgot-password',
+        component   : () => import('../views/auth/ForgotPassword.vue'),
+        meta        : { guest: true }
+    },
+    {
+        path        : '/admin/reset-password',
+        component   : () => import('../views/auth/ResetPassword.vue'),
+        meta        : { guest: true },
+        props       : (route) => ({
+            token: route.query.token,
+            email: route.query.email
+        })
+    }
 ]
 
 const router = createRouter({
