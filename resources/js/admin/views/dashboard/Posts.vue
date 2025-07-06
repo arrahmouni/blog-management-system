@@ -179,16 +179,20 @@
                     <!-- Categories (Multi-Select) -->
                     <div class="mb-4">
                         <label class="block text-gray-700 mb-2">Categories</label>
-                        <select
+                        <v-select
                             v-model="selectedCategories"
-                            class="w-full px-3 py-2 border rounded-lg"
-                            :class="{ 'border-red-500': errors.category_ids }"
-                            multiple
-                        >
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.title }}
-                            </option>
-                        </select>
+                            :options="filteredCategories"
+                            :filterable="false"
+                            :loading="isLoadingCategories"
+                            :multiple="true"
+                            :clearable="true"
+                            label="title"
+                            :reduce="option => option"
+                            :get-option-label="option => option.title"
+                            placeholder="Search and select categories"
+                            :class="{ 'border border-red-500 rounded-md': errors.category_ids }"
+                            @search="searchCategories"
+                        />
                         <ErrorMessage :errors="errors" field="category_ids" />
                     </div>
 
@@ -259,16 +263,20 @@
                     <!-- Category Selection -->
                     <div class="mb-4">
                         <label class="block text-gray-700 mb-2">Categories</label>
-                        <select
+                        <v-select
                             v-model="selectedCategories"
-                            class="w-full px-3 py-2 border rounded-lg"
-                            :class="{ 'border-red-500': errors.category_ids }"
-                            multiple
-                        >
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.title }}
-                            </option>
-                        </select>
+                            :options="filteredCategories"
+                            :filterable="false"
+                            :loading="isLoadingCategories"
+                            :multiple="true"
+                            :clearable="true"
+                            label="title"
+                            placeholder="Search and select categories"
+                            :reduce="option => option"
+                            :get-option-label="option => option.title"
+                            :class="{ 'border border-red-500 rounded-md': errors.category_ids }"
+                            @search="searchCategories"
+                        />
                         <ErrorMessage :errors="errors" field="category_ids" />
                     </div>
 
@@ -495,10 +503,13 @@
     import ErrorMessage from "../../views/components/ErrorMessage.vue";
     import { useUser } from '../../composables/useUser'
     import Swal from 'sweetalert2'
+    import vSelect from "vue-select";
+    import "vue-select/dist/vue-select.css";
 
     const { isAdmin } = useUser();
     const categories = ref([]);
     const selectedCategories = ref([]);
+    const filteredCategories = ref([]);
     const isViewModalOpen = ref(false);
     const currentPost = ref(null);
     const comments = ref([]);
@@ -512,6 +523,7 @@
     const loadingPostDetails = ref(false);
     const modalBackdrop = ref(null);
     const modalContent = ref(null);
+    const isLoadingCategories = ref(false);
 
     const openViewModal = async (post) => {
         try {
@@ -681,12 +693,23 @@
         }
     };
 
-    const loadCategories = async () => {
+    const searchCategories = async (searchText) => {
+        if (!searchText) {
+            filteredCategories.value = [...categories.value];
+            return;
+        }
+
+        isLoadingCategories.value = true;
         try {
-            const response = await axios.get('/category');
-            categories.value = response.data.data.data;
-        } catch (error) {
-            console.error('Error loading categories:', error);
+            const response = await axios.get('/category', {
+                params: { search: searchText },
+            });
+
+            filteredCategories.value = response.data.data.data;
+        } catch (err) {
+            console.error('Error searching categories', err);
+        } finally {
+            isLoadingCategories.value = false;
         }
     };
 
@@ -721,8 +744,23 @@
     const openCreateModal = () => {
         isCreateModalOpen.value = true;
         selectedCategories.value = [];
-        loadCategories();
         clearErrors();
+        if (categories.value.length === 0) {
+            loadInitialCategories();
+        }
+    };
+
+    const loadInitialCategories = async () => {
+        isLoadingCategories.value = true;
+        try {
+            const response = await axios.get('/category');
+            categories.value = response.data.data.data;
+            filteredCategories.value = [...categories.value];
+        } catch (error) {
+            toast.error('Failed to load categories');
+        } finally {
+            isLoadingCategories.value = false;
+        }
     };
 
     const closeCreateModal = () => {
@@ -745,8 +783,8 @@
             if (newPost.value.image) {
                 formData.append("image", newPost.value.image);
             }
-            selectedCategories.value.forEach(categoryId => {
-                formData.append("category_ids[]", categoryId);
+            selectedCategories.value.forEach(c => {
+                formData.append("category_ids[]", c.id);
             });
 
             await axios.post("/post", formData, {
@@ -778,8 +816,7 @@
             category_ids: post.categories.map((cat) => cat.id),
         };
         isEditModalOpen.value = true;
-        selectedCategories.value = post.categories.map(c => c.id)
-        loadCategories();
+        selectedCategories.value = post.categories
         clearErrors();
     };
 
@@ -794,8 +831,8 @@
                 formData.append("image", newPost.value.image);
             }
 
-            selectedCategories.value.forEach(categoryId => {
-                formData.append("category_ids[]", categoryId);
+            selectedCategories.value.forEach(c => {
+                formData.append("category_ids[]", c.id);
             });
 
             await axios.post(`/post/${editingPostId.value}`, formData, {
@@ -874,7 +911,6 @@
     };
 
     onMounted(() => {
-        loadCategories(); // Load categories when the component mounts
         window.addEventListener("keydown", handleKeydown);
     });
 

@@ -46,6 +46,10 @@ class BaseApiController extends Controller
 
         $perPage = config('app.pagination');
 
+        if($request->search) {
+            $this->data['model'] = $this->data['model']->search($request->search);
+        }
+
         $this->data['data']     = $this->data['model']->paginate($perPage, ['*'], 'page', $this->data['page']);
         $this->data['paginate'] = new PaginateResource($this->data['data']);
 

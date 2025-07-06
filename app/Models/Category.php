@@ -54,4 +54,9 @@ class Category extends Model
             get: fn ($value, $attributes) => Carbon::parse($attributes['created_at'])->diffForHumans(),
         );
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('title', 'like', '%' . $search . '%');
+    }
 }

@@ -33,7 +33,7 @@ class UpgradeRequestController extends BaseApiController
     {
         $user = request()->user();
 
-        if($user->upgradeRequests()->pending()->exists()) return sendApiSuccessResponse('You already have a pending request');
+        if($user->upgradeRequests()->pending()->exists()) return sendApiFailResponse('You already have a pending request');
 
         try {
             $this->modelService->createRequest($user);
@@ -55,7 +55,7 @@ class UpgradeRequestController extends BaseApiController
     {
         Gate::authorize('accept', $upgradeRequests);
 
-        if($upgradeRequests->status != UpgradeRequestStatuses::PENDING->value) return sendApiSuccessResponse('Request already approved');
+        if($upgradeRequests->status != UpgradeRequestStatuses::PENDING->value) return sendApiFailResponse('Request status is currently not pending for approval');
 
         try {
             $this->modelService->accept($upgradeRequests);
@@ -70,7 +70,7 @@ class UpgradeRequestController extends BaseApiController
     {
         Gate::authorize('reject', $upgradeRequests);
 
-        if($upgradeRequests->status != UpgradeRequestStatuses::PENDING->value) return sendApiSuccessResponse('Request already rejected');
+        if($upgradeRequests->status != UpgradeRequestStatuses::PENDING->value) return sendApiFailResponse('Request status is currently not pending for reject');
 
         try {
             $this->modelService->reject($upgradeRequests);

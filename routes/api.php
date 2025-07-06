@@ -62,7 +62,6 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(UpgradeRequestController::class)->middleware(['auth:sanctum'])->prefix('upgrade-request')->group(function () {
     Route::get('/'                          , 'index');
-    Route::get('{upgradeRequests}'          , 'show');
     Route::get('get/status'                 , 'getStatus');
     Route::post('/apply'                    , 'apply');
     Route::post('{upgradeRequests}/accept'  , 'accept');
