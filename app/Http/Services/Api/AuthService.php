@@ -62,6 +62,29 @@ class AuthService extends BaseApiService
         return sendFailInternalResponse('Login failed, please check your credentials');
     }
 
+    /**
+     * Login user
+     *
+     * @param array $data
+     * @return array
+     */
+    public function login(array $data): array
+    {
+        $field = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        if (Auth::attempt([$field => $data['login'], 'password' => $data['password']] )) {
+            $user  = Auth::user();
+            $token = $this->createToken($user);
+
+            return sendSuccessInternalResponse('User logged in successfully', [
+                'user'  => new UserResource($user),
+                'token' => $token,
+            ]);
+        }
+
+        return sendFailInternalResponse('Login failed, please check your credentials');
+    }
+
     public function sendResetPasswordLink(array $data): array
     {
         $user = User::where('email', $data['email'])->first();

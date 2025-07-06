@@ -11,26 +11,29 @@ export const useAuthApi = () => {
     const message = ref("");
     const messageClass = ref("");
 
+
     // Function for handling authentication (login/register)
-    const authenticate = (apiRoute, formData, clearErrors, successMessage) => {
+    const authenticate = (apiRoute, formData, clearErrors, successMessage, target) => {
+        const response = ref(null)
         const handleAuth = async () => {
             try {
                 clearErrors();
                 isLoading.value = true;
                 error.value = null;
 
-                const response = await axios.post(apiRoute, formData);
+                const res = await axios.post(apiRoute, formData);
+                response.value = res;
 
                 toast.success(successMessage);
 
-                localStorage.setItem("authToken",response.data.data.token.access_token);
-                localStorage.setItem("userRole", response.data.data.user.role);
+                localStorage.setItem("authToken",res.data.data.token.access_token);
+                localStorage.setItem("userRole", res.data.data.user.role);
 
                 axios.defaults.headers.common[
                     "Authorization"
-                ] = `Bearer ${response.data.data.token.access_token}`;
+                ] = `Bearer ${res.data.data.token.access_token}`;
 
-                router.push('/admin/dashboard');
+                router.push(target);
 
             } catch (err) {
                 error.value = err;
@@ -44,6 +47,7 @@ export const useAuthApi = () => {
             handleAuth,
             isLoading,
             error,
+            response
         };
     };
 

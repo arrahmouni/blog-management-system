@@ -103,7 +103,26 @@ router.beforeEach(async (to, from, next) => {
         !to.meta.requiredRole.includes(userRole)
     ) {
         next("/admin/unauthorized");
-    } else {
+    }
+    else if (to.meta.guest) {
+        const token = localStorage.getItem('authToken');
+
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            try {
+                await axios.get('/user');
+                next('/admin/dashboard');
+            } catch (error) {
+                localStorage.removeItem('authToken');
+                delete axios.defaults.headers.common['Authorization'];
+                next();
+            }
+        } else {
+            next();
+        }
+    }
+    else {
         next();
     }
 });

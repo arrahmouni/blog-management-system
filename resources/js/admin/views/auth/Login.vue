@@ -87,7 +87,7 @@
 
     const { form, errors, clearErrors, handleApiError } = useFormValidation(initialFormState);
     const { authenticate } = useAuthApi();
-    const { handleAuth, isLoading, error } = authenticate('/login', form, clearErrors, 'You have successfully logged in.');
+    const { handleAuth, isLoading, error } = authenticate('/admin/login', form, clearErrors, 'You have successfully logged in.', '/admin/dashboard');
     const showPassword = ref(false);
 
     const toggleShowPassword = () => {

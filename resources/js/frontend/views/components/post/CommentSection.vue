@@ -57,6 +57,8 @@
 <script setup>
     import { ref, computed, onMounted, onUnmounted } from "vue";
     import CommentItem from "./CommentItem.vue";
+    import { useRouter } from "vue-router";
+    const router = useRouter();
 
     const props = defineProps({
         comments: {
@@ -95,6 +97,15 @@
 
     const submitComment = () => {
         if (newComment.value.trim()) {
+            const isAuthenticated = localStorage.getItem("authToken");
+
+            if (!isAuthenticated) {
+                router.push({
+                    name: 'Login',
+                    query: { redirect: router.currentRoute.value.fullPath }
+                });
+                return;
+            }
             emit("add-comment", {
                 content: newComment.value.trim(),
                 post_id: props.postId,

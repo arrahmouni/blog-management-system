@@ -10,7 +10,6 @@ export const usePosts = () => {
         try {
             loading.value = true;
             const response = await axios.get("posts-list", { params });
-            console.log(posts);
             posts.value = response.data.data.data;
         } catch (err) {
             error.value =

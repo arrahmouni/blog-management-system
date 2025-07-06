@@ -38,6 +38,17 @@ class AuthController extends BaseApiController
         return sendApiSuccessResponse($response['message'], $response['data']);
     }
 
+    public function login(LoginRequest $request)
+    {
+        $response = $this->authService->login($request->validated());
+
+        if(! $response['success']) {
+            return sendApiFailResponse($response['message'], code: $response['code'] ?? HttpStatusCode::BAD_REQUEST->value);
+        }
+
+        return sendApiSuccessResponse($response['message'], $response['data']);
+    }
+
     public function sendResetPasswordLink(SendPasswordResetRequest $request)
     {
         $response = $this->authService->sendResetPasswordLink($request->validated());
