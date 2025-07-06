@@ -35,15 +35,15 @@ export const fetchPostComments = async (postId, page = 1) => {
 
 export const addComment = async (postId, content) => {
     try {
-        const response = await axios.post(`/api/posts/${postId}/comments`, {
-            comment: content,
+        const response = await axios.post(`/post/${postId}/comment`, {
+            body: content,
         });
 
         if (!response.data.data) {
             throw new Error("Invalid comment data structure");
         }
 
-        return response.data.data;
+        return response.data;
     } catch (error) {
         console.error(
             "API Error - addComment:",

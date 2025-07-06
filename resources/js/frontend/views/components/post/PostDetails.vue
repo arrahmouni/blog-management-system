@@ -34,6 +34,7 @@
     import PostContent from './PostContent.vue';
     import CommentSection from './CommentSection.vue';
     import { fetchPostDetails, fetchPostComments, addComment } from '../../../api/posts';
+    import { useToast } from "vue-toastification";
 
     const route = useRoute();
     const post = ref(null);
@@ -42,6 +43,7 @@
     const isLoading = ref(true);
     const error = ref(null);
     const loadingMoreComments = ref(false);
+    const toast = useToast();
 
     const loadComments = async (page = 1) => {
         try {
@@ -87,16 +89,19 @@
     const handleAddComment = async (newComment) => {
         try {
             const createdComment = await addComment(post.value.id, newComment.content);
-
+            toast.success(createdComment.message);
+            if(!createdComment.data.data.is_accepted) {
+                return
+            }
             comments.value.unshift({
-            id: Date.now().toString(),
-            comment: newComment.content,
-            created_at: new Date().toISOString(),
-            user: {
-                full_name: "You",
-                avatar_url: "https://ui-avatars.com/api/?name=You&background=random"
-            },
-            ...createdComment
+                id: Date.now().toString(),
+                comment: newComment.content,
+                created_at: new Date().toISOString(),
+                user: {
+                    full_name: "You",
+                    avatar_url: "https://ui-avatars.com/api/?name=You&background=random"
+                },
+                ...createdComment.data.data
             });
         } catch (err) {
             console.error('Failed to add comment:', err);

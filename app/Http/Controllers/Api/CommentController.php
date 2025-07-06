@@ -47,7 +47,9 @@ class CommentController extends BaseApiController
             return sendApiFailResponse($result['message'], $result['errors']);
         }
 
-        return sendApiSuccessResponse('Created successfully', data: [
+        $message = $result->is_accepted ? 'Comment Created successfully' : 'Comment created successfully, waiting for approval';
+
+        return sendApiSuccessResponse($message, data: [
             'data' => new $this->modelResource($result),
         ]);
     }
