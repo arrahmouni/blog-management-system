@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRoles;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -24,21 +23,39 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'role'          => fake()->randomElement(UserRoles::all()),
+            'first_name'    => fake()->firstName(),
+            'last_name'     => fake()->lastName(),
+            'email'         => fake()->unique()->safeEmail(),
+            'phone'         => fake()->phoneNumber(),
+            'password'      => bcrypt('password123'),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function admin()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => UserRoles::ADMIN->value,
+            ];
+        });
+    }
+
+    public function writer()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => UserRoles::WRITER->value,
+            ];
+        });
+    }
+
+    public function user()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => UserRoles::USER->value,
+            ];
+        });
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\UserRoles;
-use App\Enums\UserStatuses;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -16,7 +15,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->enum('role', UserRoles::all())->default(UserRoles::USER->value);
-            $table->enum('status', UserStatuses::all())->default(UserStatuses::ACTIVE->value);
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone')->unique();
