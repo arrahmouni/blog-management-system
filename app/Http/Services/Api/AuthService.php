@@ -29,11 +29,14 @@ class AuthService extends BaseApiService
             $this->data['user']   = User::create($data);
         });
 
-        $this->data['user']->refresh();
+        $this->data['user'] = $this->data['user']->refresh();
+        $token = $this->createToken($this->data['user']);
+
+        Auth::login($this->data['user']);
 
         return sendSuccessInternalResponse('User registered successfully', [
             'user'  => new UserResource($this->data['user']),
-            'token' => $this->createToken($this->data['user']),
+            'token' => $token,
         ]);
     }
 
