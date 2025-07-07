@@ -1,61 +1,224 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Blog Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-stack blogging platform built with Laravel 12 and Vue 3 (Composition API). It provides an API-driven backend with role-based access control (Admin, Writer, User) and a Vue.js front-end without Inertia, enabling the API to be used by other clients if needed.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* **User Roles**: Admin, Writer, and User
+* **Authentication**: API authentication via Sanctum
+* **Posts**: Create, update, delete (soft deletes), publish/draft, attach cover images
+* **Categories**: Admin can manage categories; posts may belong to multiple categories
+* **Comments**: All roles can comment; Admin can approve/delete; live broadcasting of new comments
+* **Activity Logging**: Track all model changes via Spatie Activitylog
+* **Media Uploads**: File storage with Spatie MediaLibrary
+* **Broadcasting**: Real-time notifications with Laravel Reverb
+* **API Documentation**: Postman Collection included
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* PHP >= 8.1
+* Composer
+* MySQL (or compatible database)
+* Node.js >= 16
+* npm or yarn
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clone the repository**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   ```bash
+   git clone https://github.com/arrahmouni/blog-management-system
+   cd blog-management-system
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Copy and configure environment variables**
 
-## Laravel Sponsors
+   ```bash
+   cp .env.example .env
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   Edit `.env` to set up your database credentials and other services:
 
-### Premium Partners
+3. **Install PHP dependencies**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+   ```bash
+   composer install
+   ```
+
+4. **Install JavaScript dependencies**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+5. **Generate application key**
+
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Run migrations and seeders**
+
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+7. **Build assets**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+8. **Serve the application**
+
+   * **Backend**: `php artisan serve` (defaults to [http://127.0.0.1:8000](http://127.0.0.1:8000))
+   * **Frontend**: Vite dev server runs automatically at [http://localhost:5173](http://localhost:5173) (configured in `vite.config.js`)
+
+9. **Run the queue work**
+    ```bash
+    php artisan queue:work
+    ```
+
+10. **Start the Reverb broadcaster**
+    ```bash
+    php artisan reverb:start
+    ```
+
+## Authentication & Access
+
+Two separate login pages:
+
+* **Admin Panel**:
+  URL: `/admin/login`
+  Controller method: `AuthController@loginToAdminPanel`
+* **User Portal**:
+  URL: `/login`
+  Controller method: `AuthController@login`
+
+**Seeded users**:
+
+| Role   | Email                                           | Password    |
+| ------ | ----------------------------------------------- | ----------- |
+| Admin  | [admin@example.com](mailto:admin@example.com)   | password123 |
+| Writer | [writer@example.com](mailto:writer@example.com) | password123 |
+| User   | [user@example.com](mailto:user@example.com)     | password123 |
+
+## API Endpoints
+
+All routes are prefixed with `/api` and protected via Sanctum where noted.
+
+### Authentication
+
+| Method | Endpoint           | Description                      | Auth    |
+| ------ | ------------------ | -------------------------------- | ------- |
+| POST   | `/register`        | Register a new user              | Public  |
+| POST   | `/login`           | User login                       | Public  |
+| POST   | `/admin/login`     | Admin Panel login                | Public  |
+| POST   | `/logout`          | Logout                           | Sanctum |
+| POST   | `/forgot-password` | Send reset link (throttle 3/min) | Public  |
+| POST   | `/reset-password`  | Reset password                   | Public  |
+| GET    | `/user`            | Get authenticated user info      | Sanctum |
+
+### Categories (Admin)
+
+| Method | Endpoint                 | Description              | Auth    |
+| ------ | ------------------------ | ------------------------ | ------- |
+| GET    | `/category`              | List categories          | Sanctum |
+| GET    | `/category/{id}`         | Get a category           | Sanctum |
+| POST   | `/category`              | Create new category      | Sanctum |
+| POST   | `/category/{id}`         | Update a category        | Sanctum |
+| DELETE | `/category/{id}`         | Soft delete a category   | Sanctum |
+| POST   | `/category/{id}/restore` | Restore soft-deleted     | Sanctum |
+| DELETE | `/category/{id}/force`   | Force delete permanently | Sanctum |
+| GET    | `/category/{id}/logs`    | Activity logs            | Sanctum |
+
+### Posts
+
+| Method | Endpoint             | Description               | Auth    |
+| ------ | -------------------- | ------------------------- | ------- |
+| GET    | `/post`              | List posts                | Sanctum |
+| GET    | `/post/{id}`         | Get post                  | Sanctum |
+| POST   | `/post`              | Create post               | Sanctum |
+| POST   | `/post/{id}`         | Update post               | Sanctum |
+| PUT    | `/post/{id}/approve` | Approve post (Admin only) | Sanctum |
+| DELETE | `/post/{id}`         | Soft delete post          | Sanctum |
+| POST   | `/post/{id}/restore` | Restore post              | Sanctum |
+| DELETE | `/post/{id}/force`   | Force delete              | Sanctum |
+| GET    | `/post/{id}/logs`    | Activity logs             | Sanctum |
+
+### Comments
+
+| Method | Endpoint                         | Description             | Auth    |
+| ------ | -------------------------------- | ----------------------- | ------- |
+| GET    | `/post/{post}/comment`           | List comments on a post | Sanctum |
+| GET    | `/post/{post}/comment/{comment}` | Get a comment           | Sanctum |
+| POST   | `/post/{post}/comment`           | Add a new comment       | Sanctum |
+| PUT    | `/comment/{id}/accept`           | Approve comment (Admin) | Sanctum |
+| DELETE | `/comment/{id}`                  | Soft delete comment     | Sanctum |
+
+### Public Home Endpoints
+
+| Method | Endpoint                | Description          | Auth   |
+| ------ | ----------------------- | -------------------- | ------ |
+| GET    | `/posts-list`           | List published posts | Public |
+| GET    | `/categories-list`      | List all categories  | Public |
+| GET    | `/authors-list`         | List authors         | Public |
+| GET    | `/post-details/{slug}`  | Post detail by slug  | Public |
+| GET    | `/post-comments/{post}` | Comments by post     | Public |
+
+### Upgrade Requests (Admin)
+
+| Method | Endpoint                       | Description                | Auth    |
+| ------ | ------------------------------ | -------------------------- | ------- |
+| GET    | `/upgrade-request`             | List requests              | Sanctum |
+| GET    | `/upgrade-request/get/status`  | Get current upgrade status | Sanctum |
+| POST   | `/upgrade-request/apply`       | Apply for role upgrade     | Sanctum |
+| POST   | `/upgrade-request/{id}/accept` | Accept upgrade (Admin)     | Sanctum |
+| POST   | `/upgrade-request/{id}/reject` | Reject upgrade (Admin)     | Sanctum |
+
+## Frontend (Vue 3)
+
+* Located in `resources/js` (Laravel) and compiled with Vite
+* Vue Router handles client routes
+* Forms built with `vue-yup-form` and input masks via `vue-the-mask`
+* UI styled with Tailwind CSS
+* Components under `admin/` for Admin Panel and `frontend/` for User Portal
+
+### Admin Panel Routes
+
+* `/admin/login`
+* `/admin/dashboard`
+* `/admin/categories` (Admin only)
+* `/admin/posts` (Admin & Writer)
+* `/admin/upgrade-requests` (Admin only)
+
+### User Portal Routes
+
+* `/` (Home)
+* `/posts`
+* `/post/:slug`
+* `/login`
+* `/register`
+* `/forgot-password`
+* `/reset-password`
+
+## Running Tests
+
+> **Coming soon**: Test suites will be implemented in the next iteration.
+
+## Postman Collection
+
+A Postman collection is included at `docs/Blog System.postman_collection.json`.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Pull requests are welcome. For major changes, please open an issue first to discuss.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced under the MIT license.
