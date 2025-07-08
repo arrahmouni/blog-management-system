@@ -31,11 +31,10 @@
                 <div>
                     <h3 class="text-lg font-semibold">Links</h3>
                     <div class="mt-4 space-y-2 footer-links">
-                        <a href="#" class="block text-gray-400 hover:text-white">Home</a>
-                        <!-- <a href="#" class="block text-gray-400 hover:text-white">Blog</a>
-                        <a href="#" class="block text-gray-400 hover:text-white">Categories</a>
-                        <a href="#" class="block text-gray-400 hover:text-white">Popular Posts</a>
-                        <a href="#" class="block text-gray-400 hover:text-white">Authors</a> -->
+                    <router-link to="/" class="block text-gray-400 hover:text-white">Home</router-link>
+                    <router-link to="/posts" class="block text-gray-400 hover:text-white">Posts</router-link>
+                    <router-link to="/categories" class="block text-gray-400 hover:text-white">Categories</router-link>
+                    <router-link to="/authors" class="block text-gray-400 hover:text-white">Authors</router-link>
                     </div>
                 </div>
 

@@ -36,6 +36,28 @@
                         >
                             Posts
                         </router-link>
+                        <router-link
+                            to="/categories"
+                            :class="[
+                                'px-1 pt-1 font-medium',
+                                route.path.startsWith('/categories')
+                                    ? 'text-indigo-600 border-b-2 border-indigo-500'
+                                    : 'text-gray-500 hover:text-gray-700',
+                            ]"
+                        >
+                            Categories
+                        </router-link>
+                        <router-link
+                            to="/authors"
+                            :class="[
+                                'px-1 pt-1 font-medium',
+                                route.path.startsWith('/authors')
+                                    ? 'text-indigo-600 border-b-2 border-indigo-500'
+                                    : 'text-gray-500 hover:text-gray-700',
+                            ]"
+                        >
+                            Authors
+                        </router-link>
                     </div>
                 </div>
                 <div class="flex items-center">

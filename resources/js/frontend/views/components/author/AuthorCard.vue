@@ -1,5 +1,7 @@
 <template>
-    <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
+    <div class="bg-white rounded-xl shadow-md overflow-hidden relative cursor-pointer"
+    @click="goToAuthorPosts"
+    >
         <div class="p-6">
             <div class="flex flex-col items-center">
                 <img
@@ -42,12 +44,22 @@
 </template>
 
 <script setup>
+    import { useRouter } from 'vue-router';
+    const router = useRouter();
+
     const props = defineProps({
-        author: {
-            type: Object,
-            required: true,
-        },
+        author: Object
     });
+
+    const goToAuthorPosts = () => {
+        router.push({
+            name: 'posts.index',
+            query: {
+                author: props.author.id,
+            },
+        });
+    };
+
 
     const avatars = [
         "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",

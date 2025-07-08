@@ -32,7 +32,7 @@ class NewCommentNotification extends Notification implements ShouldBroadcast
         return (new MailMessage)
             ->subject('New Comment on Your Post')
             ->line('A new comment has been added to your post: ' . $this->post->title)
-            ->action('View Comment', url('/posts/' . $this->post->id))
+            ->action('View Comment', url('/posts/' . $this->post->slug))
             ->line('Thank you for using our platform!');
     }
 
@@ -52,6 +52,7 @@ class NewCommentNotification extends Notification implements ShouldBroadcast
         return new BroadcastMessage([
             'comment_id'        => $this->comment->id,
             'post_id'           => $this->post->id,
+            'post_slug'         => $this->post->slug,
             'post_title'        => $this->post->title,
             'comment_author'    => $this->comment->user->full_name,
             'message'           => 'New comment: ' . substr($this->comment->body, 0, 50) . '...',

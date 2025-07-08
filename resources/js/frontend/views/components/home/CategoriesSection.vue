@@ -19,13 +19,13 @@
             </div>
 
             <div class="mt-12 text-center">
-                <a
-                    href="#"
+                <router-link
+                    to="/categories"
                     class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
                 >
                     View All Categories
                     <i class="fas fa-arrow-right ml-2"></i>
-                </a>
+                </router-link>
             </div>
         </div>
     </div>

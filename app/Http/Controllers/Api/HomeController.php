@@ -19,8 +19,16 @@ class HomeController extends BaseApiController
     {
         $query = Post::published()->withCount('comments');
 
-        if($request->featured) {
+        if($request->filled('featured')) {
             $query = $query->HasMostComments();
+        }
+
+        if($request->filled('category')) {
+            $query = $query->whereHas('categories', fn($q) => $q->where('slug', $request->category));
+        }
+
+        if($request->filled('author')) {
+            $query = $query->whereBelongsTo(User::find($request->author));
         }
 
         if($request->limit) {

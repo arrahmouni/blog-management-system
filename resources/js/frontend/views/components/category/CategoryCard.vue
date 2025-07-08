@@ -1,6 +1,7 @@
 <template>
     <div
         class="category-item bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer"
+        @click="goToCategoryPosts"
     >
         <div
             class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
@@ -19,12 +20,22 @@
 </template>
 
 <script setup>
+    import { useRouter } from 'vue-router';
+    const router = useRouter();
+
     const props = defineProps({
-        category: {
-            type: Object,
-            required: true,
-        },
+        category: Object
     });
+
+    const goToCategoryPosts = () => {
+        router.push({
+            name: 'posts.index',
+            query: {
+                category: props.category.slug,
+            },
+        });
+    };
+
 
     const iconClass = "fas fa-folder";
     const iconBackgroundClass = "bg-indigo-100";

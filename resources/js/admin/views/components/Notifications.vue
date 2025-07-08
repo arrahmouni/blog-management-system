@@ -52,7 +52,7 @@
             </div>
             <div class="mt-3 flex justify-end">
                 <a
-                    :href="'/posts/' + notification.post_id"
+                    :href="'/post/' + notification.post_slug"
                     class="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
                     View Post
@@ -74,6 +74,7 @@
             addNotification({
                 id: Date.now(),
                 post_id: notification.post_id,
+                post_slug: notification.post_slug,
                 post_title: notification.post_title,
                 message: notification.message,
                 author: notification.comment_author,

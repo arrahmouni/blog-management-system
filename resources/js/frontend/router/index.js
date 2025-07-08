@@ -9,6 +9,8 @@ import Unauthorized     from '../views/errors/403.vue'
 import ForgotPassword   from '../views/auth/ForgotPassword.vue';
 import ResetPassword    from '../views/auth/ResetPassword.vue';
 import PostsList        from '../views/PostsList.vue';
+import CategoriesList   from '../views/CategoriesList.vue';
+import AuthorsList      from '../views/AuthorsList.vue';
 
 const routes = [
     {
@@ -25,7 +27,20 @@ const routes = [
     },
     {
         path        : '/posts',
-        component   : PostsList
+        name        : 'posts.index',
+        component   : PostsList,
+        props     : route => ({
+            categorySlug: route.query.category || null,
+            authorId    : route.query.author || null
+        })
+    },
+    {
+        path        : '/categories',
+        component   : CategoriesList
+    },
+    {
+        path        : '/authors',
+        component   : AuthorsList
     },
     {
         path        : '/post/:slug',

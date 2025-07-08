@@ -23,21 +23,34 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount } from "vue";
+    import { ref, onMounted, onBeforeUnmount, watch } from "vue";
     import PostCard from "../views/components/post/PostCard.vue";
     import axios from "axios";
+    import { useRoute } from "vue-router";
 
-    const posts = ref([]);
-    const page = ref(1);
-    const isLoading = ref(false);
-    const noMorePosts = ref(false);
+    const posts         = ref([]);
+    const page          = ref(1);
+    const isLoading     = ref(false);
+    const noMorePosts   = ref(false);
+    const route         = useRoute();
+
+    const props = defineProps({
+        categorySlug: String,
+        authorId: [String, Number],
+    });
 
     const loadPosts = async () => {
         if (isLoading.value || noMorePosts.value) return;
         isLoading.value = true;
 
         try {
-            const response = await axios.get(`/posts-list?page=${page.value}`);
+            const response = await axios.get('/posts-list', {
+                params: {
+                    page        : page.value,
+                    category    : props.categorySlug,
+                    author      : props.authorId,
+                }
+            });
             const data = response.data.data.data;
 
             if (data.length === 0) {
@@ -59,13 +72,25 @@
         if (nearBottom) loadPosts();
     };
 
-    onMounted(() => {
+    const resetList = () => {
+        posts.value = [];
+        page.value = 1;
+        noMorePosts.value = false;
         loadPosts();
+    };
+
+    onMounted(() => {
+        resetList();
         window.addEventListener("scroll", handleScroll);
     });
 
     onBeforeUnmount(() => {
         window.removeEventListener("scroll", handleScroll);
+    });
+
+    watch(() => route.params.categorySlug, (newSlug) => {
+        categorySlug.value = newSlug;
+        resetList();
     });
 </script>
 
