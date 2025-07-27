@@ -1,13 +1,15 @@
-# render.yaml
-
+# Updated render.yaml
 services:
   - type: web
     name: laravel-app
     env: docker
     plan: free
     dockerfilePath: Dockerfile
-    buildCommand: ""
-    startCommand: "php artisan serve --host=0.0.0.0 --port=8080"
+    startCommand: >
+      bash -c "
+        php artisan migrate --force;
+        php artisan serve --host=0.0.0.0 --port=8080
+      "
     envVars:
       - key: APP_ENV
         value: production
