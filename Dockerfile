@@ -4,7 +4,7 @@ FROM php:8.2-apache
 # Set working directory
 WORKDIR /var/www/html
 
-# Install required PHP extensions and dependencies
+# Install PHP dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -13,16 +13,16 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    npm \
-    nodejs \
+    gnupg \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get install -y nodejs
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
+
+# Install Node.js 18 (correctly)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && node -v && npm -v
 
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
@@ -37,7 +37,7 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Install frontend dependencies (optional, if you use Laravel Mix)
+# Install frontend dependencies
 RUN npm install && npm run build
 
 # Expose port
