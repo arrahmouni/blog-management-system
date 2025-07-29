@@ -104,12 +104,14 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # ---------- NGINX CONFIG ----------
 COPY nginx.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
 
 # ---------- SUPERVISOR ----------
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # ---------- EXPOSE ----------
-EXPOSE 80
+EXPOSE 10000
 
 # ---------- START SCRIPT ----------
 COPY entrypoint.sh /entrypoint.sh
