@@ -1,10 +1,10 @@
 # Use the official PHP image with Apache
 FROM php:8.2-apache
 
-# Set working directory
-WORKDIR /var/www/html
+# Set working directory (for Laravel, we copy to /var/www/laravel)
+WORKDIR /var/www/laravel
 
-# Install PHP dependencies
+# Install PHP extensions and dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
 
-# Install Node.js 20 (officially)
+# Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && node -v && npm -v
@@ -27,12 +27,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Copy Laravel app files
+# Copy project files into Docker container
 COPY . .
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/laravel \
+    && chmod -R 755 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
+
+# Set the Apache DocumentRoot to Laravel's public directory
+RUN sed -i "s|DocumentRoot /var/www/html|DocumentRoot /var/www/laravel/public|g" /etc/apache2/sites-available/000-default.conf
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
