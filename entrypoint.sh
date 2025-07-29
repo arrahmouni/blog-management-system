@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Fix permissions (ensure www-data owns files)
-chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache
+# Wait for DB (optional: add wait logic here)
 
-# Run migrations/seeds AS www-data
-su -s /bin/bash www-data -c "php artisan migrate --force"
-su -s /bin/bash www-data -c "php artisan db:seed --force"
-su -s /bin/bash www-data -c "php artisan storage:link"
-su -s /bin/bash www-data -c "php artisan optimize"
+php artisan key:generate
+php artisan migrate --force
+php artisan storage:link
 
-npm run dev &
-
-# Start Apache
-apache2-foreground
+# Start services
+exec /usr/bin/supervisord
