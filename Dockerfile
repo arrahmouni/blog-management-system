@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libpq-dev \
     zip \
     gnupg \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -34,8 +35,10 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 755 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
 
-RUN chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache \
+RUN mkdir -p /var/www/laravel/storage/logs \
+    && chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache \
     && chmod -R 775 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
+
 
 # Set the Apache DocumentRoot to Laravel's public directory
 RUN sed -i "s|DocumentRoot /var/www/html|DocumentRoot /var/www/laravel/public|g" /etc/apache2/sites-available/000-default.conf
