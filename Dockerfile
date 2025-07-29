@@ -34,6 +34,9 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 755 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
 
+RUN chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache \
+    && chmod -R 775 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
+
 # Set the Apache DocumentRoot to Laravel's public directory
 RUN sed -i "s|DocumentRoot /var/www/html|DocumentRoot /var/www/laravel/public|g" /etc/apache2/sites-available/000-default.conf
 
