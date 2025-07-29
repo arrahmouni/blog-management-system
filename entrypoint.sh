@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# Wait for the DB to be ready (optional but recommended)
-# sleep 10
-
-# Fix permissions at runtime
-mkdir -p /var/www/laravel/storage/logs
+# Fix permissions (ensure www-data owns files)
 chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache
-chmod -R 775 /var/www/laravel/storage /var/www/laravel/bootstrap/cache
 
+# Run migrations/seeds AS www-data
+su -s /bin/bash www-data -c "php artisan migrate --force"
+su -s /bin/bash www-data -c "php artisan db:seed --force"
 
-# Run Laravel migrations and seeders
-php artisan migrate --force
-php artisan db:seed --force
-
-# Start Apache (or php-fpm, etc.)
+# Start Apache
 apache2-foreground
