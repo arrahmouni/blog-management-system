@@ -1,5 +1,7 @@
 #!/bin/bash
 
+envsubst '$PORT' < /etc/nginx/sites-available/default > /etc/nginx/sites-enabled/default
+
 # Wait for DB (optional: add wait logic here)
 
 php artisan key:generate
